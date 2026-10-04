@@ -1,0 +1,8 @@
+{
+  "forecast_origin_order": "passed",
+  "forecast_records": 120,
+  "capacity_monotonicity": "passed",
+  "annual_total_reconciliation": "passed",
+  "random_seed": 42,
+  "actuals_imputed": 0
+}

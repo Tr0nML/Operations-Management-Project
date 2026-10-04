@@ -1,0 +1,3257 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DFC Operations Evidence Dashboard</title>
+<style>
+:root{--ink:#183747;--blue:#176b87;--orange:#c56634;--muted:#5c6c75;--line:#d6e0e3;--paper:#f4f6f4}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,Arial,sans-serif}header{background:#123846;color:white;padding:40px max(5vw,22px) 32px}header p{max-width:980px;color:#dfebec}h1{font-size:clamp(28px,4vw,43px);line-height:1.12;margin:10px 0 18px;letter-spacing:-1px}h2{font-size:21px;margin:0 0 6px}h3{font-size:18px;margin:0 0 8px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#b7dadd}main{max-width:1440px;padding:24px;margin:auto}.controls{display:flex;gap:22px;align-items:center;flex-wrap:wrap;background:white;padding:18px;border:1px solid var(--line)}select,button,input[type=text]{font:inherit;border:1px solid #9db0b7;background:white;color:var(--ink);border-radius:4px;padding:9px 12px}button{cursor:pointer;background:var(--blue);color:white;border:none}button:hover{background:#104d62}label{display:flex;gap:10px;align-items:center}small,.note{font-size:13px;color:var(--muted)}.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:20px 0}.kpi{background:white;border-top:4px solid var(--blue);padding:20px}.kpi strong{display:block;font-size:35px;letter-spacing:-.8px}.kpi span{font-size:14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}article{background:white;border:1px solid var(--line);padding:22px;min-width:0}.wide{grid-column:1/-1}.chart{width:100%;height:auto;display:block;min-height:220px}.legend{font-size:13px;display:flex;gap:18px;flex-wrap:wrap}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}.chart text{font-family:system-ui,Arial,sans-serif;font-size:12px;fill:#415963}.chart .gridline{stroke:#e4e9ec;stroke-width:1}.chart .axis{stroke:#aebdc4}.chart .trace{fill:none;stroke-width:2.4}.chart circle{cursor:help}.finding{font-size:14px;margin:10px 0 0}.status{display:inline-block;padding:3px 8px;background:#eaf2f4;color:#15536b;font-size:12px;margin-bottom:8px}.warning{background:#fff5e7;border-left:3px solid #bd7a20;padding:13px;font-size:14px;margin-top:18px}.slider-row{display:flex;align-items:center;gap:16px;margin:14px 0;flex-wrap:wrap}input[type=range]{accent-color:var(--blue);width:220px}table{border-collapse:collapse;width:100%;font-size:13px}td,th{text-align:left;padding:9px;border-bottom:1px solid var(--line)}th{background:#eef3f4}.table-wrap{overflow:auto}.mini-output{font-size:22px;font-weight:700;margin:8px 0}.chat-form{display:flex;gap:8px;margin:16px 0}.chat-form input{flex:1;min-width:0}#answer{border-left:3px solid var(--blue);padding-left:16px;min-height:48px}.example{color:var(--blue);background:#eaf2f4;font-size:13px;padding:6px 10px;margin:3px}.sources a{color:var(--blue);word-break:break-word}details{margin-top:14px}summary{cursor:pointer;font-weight:650}footer{padding:28px 0;font-size:13px;color:var(--muted)}.source-line{font-size:12px;color:var(--muted);margin-top:10px}.metric-control{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:12px 0}.sr-only{position:absolute;left:-10000px}@media(max-width:780px){.grid{grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.wide{grid-column:auto}main{padding:14px}article{padding:17px}header{padding:26px 20px}.controls label{width:100%}.chart{min-height:180px}.kpi strong{font-size:29px}}@media print{header{background:white;color:#123846}header p{color:#415963}.controls,.chat-form,button{display:none}article{break-inside:avoid}.grid{display:block}article{margin-bottom:15px}}
+</style></head><body>
+<header><div class="eyebrow">Operations Management · Working with AI</div><h1>DFC growth and operating performance</h1><p>Evidence from EDFC and WDFC, with historical capacity scenarios for conventional Indian Railways lines. Core corridor data: April 2021–March 2025. Research prepared for the 4 October 2026 submission.</p><div>Observed data · Audited comparisons · Explicit assumptions</div></header>
+<main><div class="controls"><label>Period <select id="year"><option value="all">All available months</option><option value="2021">FY2021–22</option><option value="2022">FY2022–23</option><option value="2023">FY2023–24</option><option value="2024">FY2024–25</option></select></label><label>Corridor <select id="corridor"><option value="all">Both corridors</option><option>EDFC</option><option>WDFC</option></select></label><button id="download">Download monthly train CSV</button><small>Filters affect charts 1–4. Forecasts and scenarios have their own controls.</small></div>
+<div class="kpis"><div class="kpi"><span>FY2024–25 reported train movements</span><strong>130,116</strong><span>+47.5% from FY2023–24</span></div><div class="kpi"><span>EDFC mean wagon turnround</span><strong>1.64 days</strong><span>+34.2% year on year; unweighted monthly mean</span></div><div class="kpi"><span>Selected model test error</span><strong>4.66% WAPE</strong><span>Day-adjusted naive · rolling one-month forecasts</span></div></div>
+<div class="grid">
+<article><h2>1 · Network traffic growth</h2><p class="note">Monthly train movements; December 2020–March 2025.</p><div id="growth"></div><p class="finding">Growth measures network use. Changing commissioned route length prevents interpreting it as productivity growth.</p><div class="source-line">S1 · Printed page 48, Table 3. FY2020–21 covers December–March only.</div></article>
+<article><h2>2 · Corridor traffic</h2><p class="note">Reported average trains per day in each month.</p><div id="traffic"></div><p class="finding">WDFC and EDFC show rising traffic. February 2023 corridor values are excluded because their sum does not reconcile.</p><div class="source-line">S1 · Printed page 47, Table 2. Corridor rate data here begins April 2022.</div></article>
+<article><h2>3 · Freight operating speed</h2><p class="note">Reported monthly corridor averages in km/h.</p><div id="speed"></div><p class="finding">EDFC’s annual mean fell from 45.11 to 41.65 km/h in FY2024–25. This pattern merits investigation; it does not isolate congestion as the cause.</p><div class="source-line">S1 Table 5; S2 cross-check. WDFC March 2023 is disputed and excluded.</div></article>
+<article><h2>4 · Wagon turnround</h2><p class="note">DFCCIL-reported wagon turnround in days; lower is usually preferable, conditional on trip mix.</p><div id="wtr"></div><p class="finding">EDFC’s mean increased from 1.22 to 1.64 days. WDFC’s mean was 0.78 days in FY2024–25. Corridor and journey mix differ.</p><div class="source-line">S1 · Printed page 49, Table 6. This is not terminal dwell time.</div></article>
+<article class="wide"><span class="status">Retrospective evaluation</span><h2>5 · Does machine learning improve the forecast?</h2><div class="metric-control"><label>Model <select id="model"></select></label><span id="forecast-score"></span></div><div id="forecast"></div><div class="table-wrap"><table id="model-table"></table></div><p class="finding">Selection used FY2023–24 validation MAE. The chosen day-adjusted naive model also outperformed random forest in FY2024–25. Each prediction uses only prior monthly observations.</p><div class="warning">A trial band based on the 80th percentile of validation errors covered only 5 of 12 test outcomes. It is inadequate for operational service commitments. The April 2025 demonstration forecast is 12,094 movements, using data through March 2025; it is not a current forecast and publication vintages were not reconstructed.</div></article>
+<article class="wide"><span class="status">Hypothetical scenario</span><h2>6 · How much capacity relief could diversion create?</h2><div class="slider-row"><label for="diversion">Additional freight diversion <input type="range" id="diversion" min="0" max="100" value="50" step="5"></label><strong id="diversion-value">50%</strong></div><div id="capacity"></div><p class="finding" id="capacity-readout"></p><p class="note">Historical FY2022–23 residual freight, not a pre-DFC baseline. Equal train weights; passenger and other trains fixed. Normalized utilization = published utilization × (passenger + other + remaining freight) ÷ original total trains. The dashed 100% reference does not mark complete network paralysis. Section totals must not be added as unique journeys.</p><div class="source-line">S3 · Annex 4, printed page 85, Table 5. Source utilization includes a maintenance convention; nominal capacity is not used as an interchangeable denominator.</div></article>
+<article class="wide"><span class="status">All cost inputs are analyst assumptions</span><h2>7 · Interchange coordination pilot economics</h2><div class="slider-row"><label>Hours saved per train <input type="range" id="hours" min="0" max="2" value="1" step="0.05"></label><strong id="hours-value">1.00 hour</strong><label>Cash realization <input type="range" id="realization" min="0" max="100" value="40" step="5"></label><strong id="realization-value">40%</strong></div><div class="mini-output" id="cost-output"></div><div id="cost"></div><p class="note">Assumptions: 20 pilot trains/day × 300 days × INR 5,000/train-hour; setup INR 0.40 crore; annual operating cost INR 0.30 crore. First-year net = valued hours × cash realization − setup − operating cost. No DFC construction benefits are monetized. Base case breaks even in year one at 35 minutes saved per train; this is a hypothesis to validate.</p></article>
+<article class="wide"><h2>Evidence assistant</h2><p class="note">A local retrieval chatbot over 11 cited, AI-assisted evidence summaries. It returns source cards; it cannot access live trains, issue dispatch instructions or generate new facts. Retrieval relevance does not establish that an entire question is answered.</p><div><button class="example" data-question="How does freight diversion affect capacity?">Capacity relief</button><button class="example" data-question="Why was the speed observation excluded?">Data exclusions</button><button class="example" data-question="How were forecast models validated?">Forecast validation</button></div><form class="chat-form" id="ask"><label class="sr-only" for="question">Question</label><input id="question" type="text" placeholder="Ask about speed, capacity, validation or terminals" autocomplete="off"><button type="submit">Find evidence</button></form><div id="answer" aria-live="polite">Ask a question to retrieve relevant evidence and its source.</div><details><summary>Text analysis and retrieval method</summary><p class="note">Python TF-IDF ranks distinctive words and bigrams in the curated summaries. Human-assigned themes cover throughput, reliability, data quality, capacity, comparability, connectivity, evaluation and forecasting. These are analyst-selected evidence themes, not statistically representative literature frequencies. The browser chatbot uses token TF-IDF cosine similarity with a minimum relevance threshold.</p><div id="text-summary" class="table-wrap"></div></details></article>
+<article class="wide sources"><h2>Sources and audit trail</h2><p>Ten public primary or technical sources support the study. The complete raw cells, clean data, discrepancy log, code and source register are in the project package.</p><ol id="sources"></ol><details><summary>Important limits of interpretation</summary><p class="note">No random assignment, comparable untreated route panel, train-level dwell data or matched route lengths were available. National Indian Railways averages and DFC averages describe different traffic populations. Staged commissioning, trip mix, COVID effects and other railway investments confound causal comparisons. No synthetic records were added to observed data. Scenario and cost inputs are clearly separated. The forecast model is an academic retrospective demonstration, not a railway control system.</p></details></article>
+</div><footer>Indian Railways and DFCCIL study · All monetary scenarios are illustrative · Offline dashboard with no telemetry or external API calls</footer></main>
+<script>
+const D={
+  "monthly": [
+    {
+      "date": "2020-12-01T00:00:00.000",
+      "fy_start": 2020,
+      "trains": 17,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 0.5483870968
+    },
+    {
+      "date": "2021-01-01T00:00:00.000",
+      "fy_start": 2020,
+      "trains": 646,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 20.8387096774
+    },
+    {
+      "date": "2021-02-01T00:00:00.000",
+      "fy_start": 2020,
+      "trains": 815,
+      "days": 28,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 29.1071428571
+    },
+    {
+      "date": "2021-03-01T00:00:00.000",
+      "fy_start": 2020,
+      "trains": 992,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 32.0
+    },
+    {
+      "date": "2021-04-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 771,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 25.7
+    },
+    {
+      "date": "2021-05-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 1071,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 34.5483870968
+    },
+    {
+      "date": "2021-06-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 1402,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 46.7333333333
+    },
+    {
+      "date": "2021-07-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 1683,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 54.2903225806
+    },
+    {
+      "date": "2021-08-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 1740,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 56.1290322581
+    },
+    {
+      "date": "2021-09-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 1687,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 56.2333333333
+    },
+    {
+      "date": "2021-10-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 2081,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 67.1290322581
+    },
+    {
+      "date": "2021-11-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 1890,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 63.0
+    },
+    {
+      "date": "2021-12-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 2416,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 77.935483871
+    },
+    {
+      "date": "2022-01-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 2975,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 95.9677419355
+    },
+    {
+      "date": "2022-02-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 2744,
+      "days": 28,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 98.0
+    },
+    {
+      "date": "2022-03-01T00:00:00.000",
+      "fy_start": 2021,
+      "trains": 3084,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 99.4838709677
+    },
+    {
+      "date": "2022-04-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 3405,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 113.5
+    },
+    {
+      "date": "2022-05-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 4021,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 129.7096774194
+    },
+    {
+      "date": "2022-06-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 4444,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 148.1333333333
+    },
+    {
+      "date": "2022-07-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 4802,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 154.9032258065
+    },
+    {
+      "date": "2022-08-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 4956,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 159.8709677419
+    },
+    {
+      "date": "2022-09-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 4633,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 154.4333333333
+    },
+    {
+      "date": "2022-10-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 4650,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 150.0
+    },
+    {
+      "date": "2022-11-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 5255,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 175.1666666667
+    },
+    {
+      "date": "2022-12-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 6013,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 193.9677419355
+    },
+    {
+      "date": "2023-01-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 6652,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 214.5806451613
+    },
+    {
+      "date": "2023-02-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 6438,
+      "days": 28,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 229.9285714286
+    },
+    {
+      "date": "2023-03-01T00:00:00.000",
+      "fy_start": 2022,
+      "trains": 7008,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 226.064516129
+    },
+    {
+      "date": "2023-04-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 6350,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 211.6666666667
+    },
+    {
+      "date": "2023-05-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 6478,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 208.9677419355
+    },
+    {
+      "date": "2023-06-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 6315,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 210.5
+    },
+    {
+      "date": "2023-07-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 6779,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 218.6774193548
+    },
+    {
+      "date": "2023-08-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 7067,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 227.9677419355
+    },
+    {
+      "date": "2023-09-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 7237,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 241.2333333333
+    },
+    {
+      "date": "2023-10-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 7608,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 245.4193548387
+    },
+    {
+      "date": "2023-11-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 7245,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 241.5
+    },
+    {
+      "date": "2023-12-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 7778,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 250.9032258065
+    },
+    {
+      "date": "2024-01-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 7768,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 250.5806451613
+    },
+    {
+      "date": "2024-02-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 8240,
+      "days": 29,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 284.1379310345
+    },
+    {
+      "date": "2024-03-01T00:00:00.000",
+      "fy_start": 2023,
+      "trains": 9360,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 301.935483871
+    },
+    {
+      "date": "2024-04-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 9358,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 311.9333333333
+    },
+    {
+      "date": "2024-05-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 10319,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 332.8709677419
+    },
+    {
+      "date": "2024-06-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 10179,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 339.3
+    },
+    {
+      "date": "2024-07-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 11230,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 362.2580645161
+    },
+    {
+      "date": "2024-08-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 10354,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 334.0
+    },
+    {
+      "date": "2024-09-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 10153,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 338.4333333333
+    },
+    {
+      "date": "2024-10-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 11024,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 355.6129032258
+    },
+    {
+      "date": "2024-11-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 10726,
+      "days": 30,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 357.5333333333
+    },
+    {
+      "date": "2024-12-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 11772,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 379.7419354839
+    },
+    {
+      "date": "2025-01-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 12122,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 391.0322580645
+    },
+    {
+      "date": "2025-02-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 10382,
+      "days": 28,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 370.7857142857
+    },
+    {
+      "date": "2025-03-01T00:00:00.000",
+      "fy_start": 2024,
+      "trains": 12497,
+      "days": 31,
+      "source_id": "S1",
+      "table": 3,
+      "printed_page": 48,
+      "trains_per_calendar_day": 403.1290322581
+    }
+  ],
+  "corridor": [
+    {
+      "date": "2021-04-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 498.0,
+      "speed_kmph": 64.5,
+      "trains_per_day": null,
+      "wtr_days": 0.65,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-04-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 49.0,
+      "speed_kmph": 38.0,
+      "trains_per_day": null,
+      "wtr_days": 0.57,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-05-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 809.0,
+      "speed_kmph": 59.0,
+      "trains_per_day": null,
+      "wtr_days": 0.41,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-05-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 12.0,
+      "speed_kmph": 41.5,
+      "trains_per_day": null,
+      "wtr_days": 4.0,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-06-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 948.0,
+      "speed_kmph": 67.0,
+      "trains_per_day": null,
+      "wtr_days": 0.45,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-06-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 57.0,
+      "speed_kmph": 26.0,
+      "trains_per_day": null,
+      "wtr_days": 2.19,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-07-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 955.0,
+      "speed_kmph": 67.0,
+      "trains_per_day": null,
+      "wtr_days": 0.43,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-07-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 497.0,
+      "speed_kmph": 27.0,
+      "trains_per_day": null,
+      "wtr_days": 1.33,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-08-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 775.0,
+      "speed_kmph": 62.5,
+      "trains_per_day": null,
+      "wtr_days": 0.43,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-08-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 924.0,
+      "speed_kmph": 33.5,
+      "trains_per_day": null,
+      "wtr_days": 1.11,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-09-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 646.0,
+      "speed_kmph": 54.5,
+      "trains_per_day": null,
+      "wtr_days": 0.58,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-09-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 1000.0,
+      "speed_kmph": 49.5,
+      "trains_per_day": null,
+      "wtr_days": 0.87,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-10-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 865.0,
+      "speed_kmph": 49.0,
+      "trains_per_day": null,
+      "wtr_days": 0.72,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-10-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 1021.0,
+      "speed_kmph": 44.0,
+      "trains_per_day": null,
+      "wtr_days": 0.79,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-11-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 859.0,
+      "speed_kmph": 57.0,
+      "trains_per_day": null,
+      "wtr_days": 0.55,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-11-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 989.0,
+      "speed_kmph": 52.5,
+      "trains_per_day": null,
+      "wtr_days": 0.83,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-12-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 816.0,
+      "speed_kmph": 60.5,
+      "trains_per_day": null,
+      "wtr_days": 0.55,
+      "quality_flag": null
+    },
+    {
+      "date": "2021-12-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 1185.0,
+      "speed_kmph": 55.0,
+      "trains_per_day": null,
+      "wtr_days": 0.85,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-01-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 887.0,
+      "speed_kmph": 62.0,
+      "trains_per_day": null,
+      "wtr_days": 0.55,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-01-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 1424.0,
+      "speed_kmph": 54.0,
+      "trains_per_day": null,
+      "wtr_days": 0.73,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-02-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 710.0,
+      "speed_kmph": 65.5,
+      "trains_per_day": null,
+      "wtr_days": 0.62,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-02-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 1474.0,
+      "speed_kmph": 53.5,
+      "trains_per_day": null,
+      "wtr_days": 0.7,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-03-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "gtkm_million": 708.0,
+      "speed_kmph": 69.0,
+      "trains_per_day": null,
+      "wtr_days": 0.65,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-03-01T00:00:00.000",
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "gtkm_million": 1887.0,
+      "speed_kmph": 54.0,
+      "trains_per_day": null,
+      "wtr_days": 0.67,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-04-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 1398.0,
+      "speed_kmph": 62.0,
+      "trains_per_day": 48.4,
+      "wtr_days": 0.53,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-04-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 1551.0,
+      "speed_kmph": 55.5,
+      "trains_per_day": 65.1,
+      "wtr_days": 0.75,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-05-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 1762.0,
+      "speed_kmph": 51.0,
+      "trains_per_day": 60.65,
+      "wtr_days": 0.5,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-05-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 1634.0,
+      "speed_kmph": 42.5,
+      "trains_per_day": 69.06,
+      "wtr_days": 0.84,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-06-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 1890.0,
+      "speed_kmph": 49.5,
+      "trains_per_day": 76.3,
+      "wtr_days": 0.54,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-06-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 1667.0,
+      "speed_kmph": 41.4,
+      "trains_per_day": 71.83,
+      "wtr_days": 0.87,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-07-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 2039.0,
+      "speed_kmph": 51.05,
+      "trains_per_day": 85.03,
+      "wtr_days": 0.53,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-07-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 1814.0,
+      "speed_kmph": 45.5,
+      "trains_per_day": 69.87,
+      "wtr_days": 0.76,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-08-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 1920.0,
+      "speed_kmph": 53.01,
+      "trains_per_day": 89.29,
+      "wtr_days": 0.52,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-08-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 1809.0,
+      "speed_kmph": 50.1,
+      "trains_per_day": 70.58,
+      "wtr_days": 0.75,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-09-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 1767.0,
+      "speed_kmph": 53.87,
+      "trains_per_day": 87.73,
+      "wtr_days": 0.44,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-09-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 1745.0,
+      "speed_kmph": 49.6,
+      "trains_per_day": 66.7,
+      "wtr_days": 0.8,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-10-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 1697.0,
+      "speed_kmph": 50.97,
+      "trains_per_day": 86.84,
+      "wtr_days": 0.57,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-10-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 1723.0,
+      "speed_kmph": 54.1,
+      "trains_per_day": 63.16,
+      "wtr_days": 0.79,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-11-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 2164.0,
+      "speed_kmph": 54.3,
+      "trains_per_day": 108.43,
+      "wtr_days": 0.67,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-11-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 1776.0,
+      "speed_kmph": 54.4,
+      "trains_per_day": 66.73,
+      "wtr_days": 0.78,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-12-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 2374.0,
+      "speed_kmph": 54.7,
+      "trains_per_day": 121.94,
+      "wtr_days": 0.73,
+      "quality_flag": null
+    },
+    {
+      "date": "2022-12-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 2003.0,
+      "speed_kmph": 57.4,
+      "trains_per_day": 72.03,
+      "wtr_days": 0.77,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-01-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 2793.0,
+      "speed_kmph": 51.15,
+      "trains_per_day": 134.61,
+      "wtr_days": 0.67,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-01-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 2268.0,
+      "speed_kmph": 57.7,
+      "trains_per_day": 79.97,
+      "wtr_days": 0.75,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-02-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 3080.0,
+      "speed_kmph": 50.92,
+      "trains_per_day": null,
+      "wtr_days": 0.74,
+      "quality_flag": "Feb2023 corridor train rates fail total reconciliation; excluded"
+    },
+    {
+      "date": "2023-02-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 2229.0,
+      "speed_kmph": 59.3,
+      "trains_per_day": null,
+      "wtr_days": 0.7,
+      "quality_flag": "Feb2023 corridor train rates fail total reconciliation; excluded"
+    },
+    {
+      "date": "2023-03-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "gtkm_million": 3460.0,
+      "speed_kmph": 43.69,
+      "trains_per_day": 139.68,
+      "wtr_days": 0.67,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-03-01T00:00:00.000",
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "gtkm_million": 2625.0,
+      "speed_kmph": null,
+      "trains_per_day": 86.39,
+      "wtr_days": 0.79,
+      "quality_flag": "WDFC Mar2023 speed disputed: S1=58.7; S2=48.7; excluded"
+    },
+    {
+      "date": "2023-04-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 3384.0,
+      "speed_kmph": 50.2,
+      "trains_per_day": 126.7,
+      "wtr_days": 0.62,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-04-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 2438.0,
+      "speed_kmph": 57.0,
+      "trains_per_day": 84.97,
+      "wtr_days": 0.84,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-05-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 3791.0,
+      "speed_kmph": 50.4,
+      "trains_per_day": 129.26,
+      "wtr_days": 0.83,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-05-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 2780.0,
+      "speed_kmph": 53.3,
+      "trains_per_day": 79.71,
+      "wtr_days": 0.68,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-06-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 4122.0,
+      "speed_kmph": 48.4,
+      "trains_per_day": 136.83,
+      "wtr_days": 0.91,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-06-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 2374.0,
+      "speed_kmph": 53.0,
+      "trains_per_day": 73.67,
+      "wtr_days": 0.9,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-07-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 5850.0,
+      "speed_kmph": 45.3,
+      "trains_per_day": 134.81,
+      "wtr_days": 1.14,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-07-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 3005.0,
+      "speed_kmph": 49.7,
+      "trains_per_day": 83.87,
+      "wtr_days": 0.75,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-08-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 6512.0,
+      "speed_kmph": 47.6,
+      "trains_per_day": 137.23,
+      "wtr_days": 1.15,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-08-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 3400.0,
+      "speed_kmph": 52.5,
+      "trains_per_day": 90.74,
+      "wtr_days": 0.79,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-09-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 7076.0,
+      "speed_kmph": 44.8,
+      "trains_per_day": 151.43,
+      "wtr_days": 1.26,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-09-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 3360.0,
+      "speed_kmph": 55.4,
+      "trains_per_day": 89.8,
+      "wtr_days": 0.87,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-10-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 7637.0,
+      "speed_kmph": 44.6,
+      "trains_per_day": 151.16,
+      "wtr_days": 1.31,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-10-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 3508.0,
+      "speed_kmph": 55.5,
+      "trains_per_day": 94.26,
+      "wtr_days": 0.86,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-11-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 7851.0,
+      "speed_kmph": 45.1,
+      "trains_per_day": 155.53,
+      "wtr_days": 1.3,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-11-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 3198.0,
+      "speed_kmph": 56.0,
+      "trains_per_day": 85.97,
+      "wtr_days": 0.83,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-12-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 8008.0,
+      "speed_kmph": 41.7,
+      "trains_per_day": 158.26,
+      "wtr_days": 1.37,
+      "quality_flag": null
+    },
+    {
+      "date": "2023-12-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 3553.0,
+      "speed_kmph": 54.9,
+      "trains_per_day": 92.65,
+      "wtr_days": 0.87,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-01-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 7834.0,
+      "speed_kmph": 39.2,
+      "trains_per_day": 152.06,
+      "wtr_days": 1.75,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-01-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 3480.0,
+      "speed_kmph": 53.8,
+      "trains_per_day": 98.52,
+      "wtr_days": 0.81,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-02-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 8626.0,
+      "speed_kmph": 41.9,
+      "trains_per_day": 175.24,
+      "wtr_days": 1.55,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-02-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 3500.0,
+      "speed_kmph": 54.6,
+      "trains_per_day": 108.9,
+      "wtr_days": 0.73,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-03-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "gtkm_million": 9699.0,
+      "speed_kmph": 42.1,
+      "trains_per_day": 176.84,
+      "wtr_days": 1.5,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-03-01T00:00:00.000",
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "gtkm_million": 4144.0,
+      "speed_kmph": 53.6,
+      "trains_per_day": 125.1,
+      "wtr_days": 0.65,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-04-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 8854.0,
+      "speed_kmph": 42.8,
+      "trains_per_day": 182.5,
+      "wtr_days": 1.37,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-04-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 3929.0,
+      "speed_kmph": 52.6,
+      "trains_per_day": 129.43,
+      "wtr_days": 0.66,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-05-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 9983.0,
+      "speed_kmph": 41.6,
+      "trains_per_day": 193.35,
+      "wtr_days": 1.44,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-05-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 4277.0,
+      "speed_kmph": 53.1,
+      "trains_per_day": 139.52,
+      "wtr_days": 0.65,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-06-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 10163.0,
+      "speed_kmph": 38.5,
+      "trains_per_day": 192.73,
+      "wtr_days": 1.82,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-06-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 4622.0,
+      "speed_kmph": 51.7,
+      "trains_per_day": 146.57,
+      "wtr_days": 0.83,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-07-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 11948.0,
+      "speed_kmph": 37.4,
+      "trains_per_day": 214.23,
+      "wtr_days": 1.78,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-07-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 4966.0,
+      "speed_kmph": 50.6,
+      "trains_per_day": 148.03,
+      "wtr_days": 0.72,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-08-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 10718.0,
+      "speed_kmph": 42.7,
+      "trains_per_day": 182.58,
+      "wtr_days": 1.6,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-08-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 4834.0,
+      "speed_kmph": 48.1,
+      "trains_per_day": 151.42,
+      "wtr_days": 0.71,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-09-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 10269.0,
+      "speed_kmph": 42.1,
+      "trains_per_day": 186.23,
+      "wtr_days": 1.74,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-09-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 4984.0,
+      "speed_kmph": 48.5,
+      "trains_per_day": 152.2,
+      "wtr_days": 0.77,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-10-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 11088.0,
+      "speed_kmph": 44.6,
+      "trains_per_day": 190.81,
+      "wtr_days": 1.53,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-10-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 5643.0,
+      "speed_kmph": 51.3,
+      "trains_per_day": 164.81,
+      "wtr_days": 0.7,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-11-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 10705.0,
+      "speed_kmph": 42.7,
+      "trains_per_day": 191.53,
+      "wtr_days": 1.7,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-11-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 5575.0,
+      "speed_kmph": 53.3,
+      "trains_per_day": 166.0,
+      "wtr_days": 0.7,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-12-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 12031.0,
+      "speed_kmph": 40.4,
+      "trains_per_day": 209.97,
+      "wtr_days": 1.73,
+      "quality_flag": null
+    },
+    {
+      "date": "2024-12-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 5878.0,
+      "speed_kmph": 54.0,
+      "trains_per_day": 169.77,
+      "wtr_days": 0.69,
+      "quality_flag": null
+    },
+    {
+      "date": "2025-01-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 11814.0,
+      "speed_kmph": 39.4,
+      "trains_per_day": 208.9,
+      "wtr_days": 1.75,
+      "quality_flag": null
+    },
+    {
+      "date": "2025-01-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 5979.0,
+      "speed_kmph": 52.0,
+      "trains_per_day": 182.13,
+      "wtr_days": 1.0,
+      "quality_flag": null
+    },
+    {
+      "date": "2025-02-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 10337.0,
+      "speed_kmph": 43.4,
+      "trains_per_day": 194.0,
+      "wtr_days": 1.66,
+      "quality_flag": null
+    },
+    {
+      "date": "2025-02-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 5278.0,
+      "speed_kmph": 55.5,
+      "trains_per_day": 176.79,
+      "wtr_days": 0.97,
+      "quality_flag": null
+    },
+    {
+      "date": "2025-03-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "gtkm_million": 12251.0,
+      "speed_kmph": 44.2,
+      "trains_per_day": 222.68,
+      "wtr_days": 1.6,
+      "quality_flag": null
+    },
+    {
+      "date": "2025-03-01T00:00:00.000",
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "gtkm_million": 6021.0,
+      "speed_kmph": 52.9,
+      "trains_per_day": 180.45,
+      "wtr_days": 0.94,
+      "quality_flag": null
+    }
+  ],
+  "annual": [
+    {
+      "fy_start": 2020,
+      "trains": 2470,
+      "calendar_days": 121,
+      "trains_per_day": 20.4132231405,
+      "total_gtkm_million": null,
+      "train_growth_pct": null
+    },
+    {
+      "fy_start": 2021,
+      "trains": 23544,
+      "calendar_days": 365,
+      "trains_per_day": 64.504109589,
+      "total_gtkm_million": 19995.0,
+      "train_growth_pct": null
+    },
+    {
+      "fy_start": 2022,
+      "trains": 62277,
+      "calendar_days": 365,
+      "trains_per_day": 170.6219178082,
+      "total_gtkm_million": 49188.0,
+      "train_growth_pct": 164.5132517839
+    },
+    {
+      "fy_start": 2023,
+      "trains": 88225,
+      "calendar_days": 366,
+      "trains_per_day": 241.0519125683,
+      "total_gtkm_million": 119128.0,
+      "train_growth_pct": 41.6654623697
+    },
+    {
+      "fy_start": 2024,
+      "trains": 130116,
+      "calendar_days": 365,
+      "trains_per_day": 356.4821917808,
+      "total_gtkm_million": 192144.0,
+      "train_growth_pct": 47.4820062341
+    }
+  ],
+  "corridorAnnual": [
+    {
+      "fy_start": 2021,
+      "corridor": "EDFC",
+      "speed_mean": 61.4583333333,
+      "speed_n": 12,
+      "wtr_mean": 0.5491666667,
+      "trains_day_mean": null,
+      "trains_day_n": 0,
+      "gtkm_million": 9476.0
+    },
+    {
+      "fy_start": 2021,
+      "corridor": "WDFC",
+      "speed_mean": 44.0416666667,
+      "speed_n": 12,
+      "wtr_mean": 1.22,
+      "trains_day_mean": null,
+      "trains_day_n": 0,
+      "gtkm_million": 10519.0
+    },
+    {
+      "fy_start": 2022,
+      "corridor": "EDFC",
+      "speed_mean": 52.18,
+      "speed_n": 12,
+      "wtr_mean": 0.5925,
+      "trains_day_mean": 94.4454545455,
+      "trains_day_n": 11,
+      "gtkm_million": 26344.0
+    },
+    {
+      "fy_start": 2022,
+      "corridor": "WDFC",
+      "speed_mean": 51.5909090909,
+      "speed_n": 11,
+      "wtr_mean": 0.7791666667,
+      "trains_day_mean": 71.0381818182,
+      "trains_day_n": 11,
+      "gtkm_million": 22844.0
+    },
+    {
+      "fy_start": 2023,
+      "corridor": "EDFC",
+      "speed_mean": 45.1083333333,
+      "speed_n": 12,
+      "wtr_mean": 1.2241666667,
+      "trains_day_mean": 148.7791666667,
+      "trains_day_n": 12,
+      "gtkm_million": 80390.0
+    },
+    {
+      "fy_start": 2023,
+      "corridor": "WDFC",
+      "speed_mean": 54.1083333333,
+      "speed_n": 12,
+      "wtr_mean": 0.7983333333,
+      "trains_day_mean": 92.3466666667,
+      "trains_day_n": 12,
+      "gtkm_million": 38740.0
+    },
+    {
+      "fy_start": 2024,
+      "corridor": "EDFC",
+      "speed_mean": 41.65,
+      "speed_n": 12,
+      "wtr_mean": 1.6433333333,
+      "trains_day_mean": 197.4591666667,
+      "trains_day_n": 12,
+      "gtkm_million": 130161.0
+    },
+    {
+      "fy_start": 2024,
+      "corridor": "WDFC",
+      "speed_mean": 51.9666666667,
+      "speed_n": 12,
+      "wtr_mean": 0.7783333333,
+      "trains_day_mean": 158.9266666667,
+      "trains_day_n": 12,
+      "gtkm_million": 61986.0
+    }
+  ],
+  "forecast": [
+    {
+      "split": "Validation",
+      "date": "2023-04-01",
+      "model": "Naive",
+      "actual": 6350.0,
+      "prediction": 7008.0,
+      "train_through": "2023-03-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-04-01",
+      "model": "Day-adjusted naive",
+      "actual": 6350.0,
+      "prediction": 6781.935483871,
+      "train_through": "2023-03-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-04-01",
+      "model": "Seasonal naive",
+      "actual": 6350.0,
+      "prediction": 3405.0,
+      "train_through": "2023-03-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-04-01",
+      "model": "12-month drift",
+      "actual": 6350.0,
+      "prediction": 7335.5454545455,
+      "train_through": "2023-03-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-04-01",
+      "model": "Random forest",
+      "actual": 6350.0,
+      "prediction": 6120.9973279221,
+      "train_through": "2023-03-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-05-01",
+      "model": "Naive",
+      "actual": 6478.0,
+      "prediction": 6350.0,
+      "train_through": "2023-04-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-05-01",
+      "model": "Day-adjusted naive",
+      "actual": 6478.0,
+      "prediction": 6561.6666666667,
+      "train_through": "2023-04-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-05-01",
+      "model": "Seasonal naive",
+      "actual": 6478.0,
+      "prediction": 4021.0,
+      "train_through": "2023-04-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-05-01",
+      "model": "12-month drift",
+      "actual": 6478.0,
+      "prediction": 6561.7272727273,
+      "train_through": "2023-04-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-05-01",
+      "model": "Random forest",
+      "actual": 6478.0,
+      "prediction": 6301.798958153,
+      "train_through": "2023-04-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-06-01",
+      "model": "Naive",
+      "actual": 6315.0,
+      "prediction": 6478.0,
+      "train_through": "2023-05-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-06-01",
+      "model": "Day-adjusted naive",
+      "actual": 6315.0,
+      "prediction": 6269.0322580645,
+      "train_through": "2023-05-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-06-01",
+      "model": "Seasonal naive",
+      "actual": 6315.0,
+      "prediction": 4444.0,
+      "train_through": "2023-05-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-06-01",
+      "model": "12-month drift",
+      "actual": 6315.0,
+      "prediction": 6662.9090909091,
+      "train_through": "2023-05-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-06-01",
+      "model": "Random forest",
+      "actual": 6315.0,
+      "prediction": 6395.4002563131,
+      "train_through": "2023-05-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-07-01",
+      "model": "Naive",
+      "actual": 6779.0,
+      "prediction": 6315.0,
+      "train_through": "2023-06-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-07-01",
+      "model": "Day-adjusted naive",
+      "actual": 6779.0,
+      "prediction": 6525.5,
+      "train_through": "2023-06-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-07-01",
+      "model": "Seasonal naive",
+      "actual": 6779.0,
+      "prediction": 4802.0,
+      "train_through": "2023-06-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-07-01",
+      "model": "12-month drift",
+      "actual": 6779.0,
+      "prediction": 6452.5454545455,
+      "train_through": "2023-06-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-07-01",
+      "model": "Random forest",
+      "actual": 6779.0,
+      "prediction": 6350.8699093268,
+      "train_through": "2023-06-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-08-01",
+      "model": "Naive",
+      "actual": 7067.0,
+      "prediction": 6779.0,
+      "train_through": "2023-07-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-08-01",
+      "model": "Day-adjusted naive",
+      "actual": 7067.0,
+      "prediction": 6779.0,
+      "train_through": "2023-07-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-08-01",
+      "model": "Seasonal naive",
+      "actual": 7067.0,
+      "prediction": 4956.0,
+      "train_through": "2023-07-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-08-01",
+      "model": "12-month drift",
+      "actual": 7067.0,
+      "prediction": 6944.7272727273,
+      "train_through": "2023-07-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-08-01",
+      "model": "Random forest",
+      "actual": 7067.0,
+      "prediction": 6446.1737328644,
+      "train_through": "2023-07-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-09-01",
+      "model": "Naive",
+      "actual": 7237.0,
+      "prediction": 7067.0,
+      "train_through": "2023-08-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-09-01",
+      "model": "Day-adjusted naive",
+      "actual": 7237.0,
+      "prediction": 6839.0322580645,
+      "train_through": "2023-08-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-09-01",
+      "model": "Seasonal naive",
+      "actual": 7237.0,
+      "prediction": 4633.0,
+      "train_through": "2023-08-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-09-01",
+      "model": "12-month drift",
+      "actual": 7237.0,
+      "prediction": 7288.2727272727,
+      "train_through": "2023-08-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-09-01",
+      "model": "Random forest",
+      "actual": 7237.0,
+      "prediction": 6612.0080566378,
+      "train_through": "2023-08-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-10-01",
+      "model": "Naive",
+      "actual": 7608.0,
+      "prediction": 7237.0,
+      "train_through": "2023-09-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-10-01",
+      "model": "Day-adjusted naive",
+      "actual": 7608.0,
+      "prediction": 7478.2333333333,
+      "train_through": "2023-09-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-10-01",
+      "model": "Seasonal naive",
+      "actual": 7608.0,
+      "prediction": 4650.0,
+      "train_through": "2023-09-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-10-01",
+      "model": "12-month drift",
+      "actual": 7608.0,
+      "prediction": 7472.1818181818,
+      "train_through": "2023-09-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-10-01",
+      "model": "Random forest",
+      "actual": 7608.0,
+      "prediction": 6825.6092494589,
+      "train_through": "2023-09-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-11-01",
+      "model": "Naive",
+      "actual": 7245.0,
+      "prediction": 7608.0,
+      "train_through": "2023-10-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-11-01",
+      "model": "Day-adjusted naive",
+      "actual": 7245.0,
+      "prediction": 7362.5806451613,
+      "train_through": "2023-10-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-11-01",
+      "model": "Seasonal naive",
+      "actual": 7245.0,
+      "prediction": 5255.0,
+      "train_through": "2023-10-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-11-01",
+      "model": "12-month drift",
+      "actual": 7245.0,
+      "prediction": 7821.9090909091,
+      "train_through": "2023-10-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-11-01",
+      "model": "Random forest",
+      "actual": 7245.0,
+      "prediction": 6979.6384285714,
+      "train_through": "2023-10-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-12-01",
+      "model": "Naive",
+      "actual": 7778.0,
+      "prediction": 7245.0,
+      "train_through": "2023-11-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-12-01",
+      "model": "Day-adjusted naive",
+      "actual": 7778.0,
+      "prediction": 7486.5,
+      "train_through": "2023-11-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-12-01",
+      "model": "Seasonal naive",
+      "actual": 7778.0,
+      "prediction": 6013.0,
+      "train_through": "2023-11-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-12-01",
+      "model": "12-month drift",
+      "actual": 7778.0,
+      "prediction": 7357.0,
+      "train_through": "2023-11-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2023-12-01",
+      "model": "Random forest",
+      "actual": 7778.0,
+      "prediction": 7038.7308709346,
+      "train_through": "2023-11-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-01-01",
+      "model": "Naive",
+      "actual": 7768.0,
+      "prediction": 7778.0,
+      "train_through": "2023-12-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-01-01",
+      "model": "Day-adjusted naive",
+      "actual": 7768.0,
+      "prediction": 7778.0,
+      "train_through": "2023-12-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-01-01",
+      "model": "Seasonal naive",
+      "actual": 7768.0,
+      "prediction": 6652.0,
+      "train_through": "2023-12-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-01-01",
+      "model": "12-month drift",
+      "actual": 7768.0,
+      "prediction": 7880.3636363636,
+      "train_through": "2023-12-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-01-01",
+      "model": "Random forest",
+      "actual": 7768.0,
+      "prediction": 7258.781218254,
+      "train_through": "2023-12-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-02-01",
+      "model": "Naive",
+      "actual": 8240.0,
+      "prediction": 7768.0,
+      "train_through": "2024-01-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-02-01",
+      "model": "Day-adjusted naive",
+      "actual": 8240.0,
+      "prediction": 7266.8387096774,
+      "train_through": "2024-01-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-02-01",
+      "model": "Seasonal naive",
+      "actual": 8240.0,
+      "prediction": 6438.0,
+      "train_through": "2024-01-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-02-01",
+      "model": "12-month drift",
+      "actual": 8240.0,
+      "prediction": 7888.9090909091,
+      "train_through": "2024-01-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-02-01",
+      "model": "Random forest",
+      "actual": 8240.0,
+      "prediction": 7415.2068818543,
+      "train_through": "2024-01-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-03-01",
+      "model": "Naive",
+      "actual": 9360.0,
+      "prediction": 8240.0,
+      "train_through": "2024-02-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-03-01",
+      "model": "Day-adjusted naive",
+      "actual": 9360.0,
+      "prediction": 8808.275862069,
+      "train_through": "2024-02-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-03-01",
+      "model": "Seasonal naive",
+      "actual": 9360.0,
+      "prediction": 7008.0,
+      "train_through": "2024-02-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-03-01",
+      "model": "12-month drift",
+      "actual": 9360.0,
+      "prediction": 8352.0,
+      "train_through": "2024-02-01"
+    },
+    {
+      "split": "Validation",
+      "date": "2024-03-01",
+      "model": "Random forest",
+      "actual": 9360.0,
+      "prediction": 7611.3471964286,
+      "train_through": "2024-02-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-04-01",
+      "model": "Naive",
+      "actual": 9358.0,
+      "prediction": 9360.0,
+      "train_through": "2024-03-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-04-01",
+      "model": "Day-adjusted naive",
+      "actual": 9358.0,
+      "prediction": 9058.064516129,
+      "train_through": "2024-03-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-04-01",
+      "model": "Seasonal naive",
+      "actual": 9358.0,
+      "prediction": 6350.0,
+      "train_through": "2024-03-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-04-01",
+      "model": "12-month drift",
+      "actual": 9358.0,
+      "prediction": 9633.6363636364,
+      "train_through": "2024-03-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-04-01",
+      "model": "Random forest",
+      "actual": 9358.0,
+      "prediction": 8051.59775,
+      "train_through": "2024-03-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-05-01",
+      "model": "Naive",
+      "actual": 10319.0,
+      "prediction": 9358.0,
+      "train_through": "2024-04-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-05-01",
+      "model": "Day-adjusted naive",
+      "actual": 10319.0,
+      "prediction": 9669.9333333333,
+      "train_through": "2024-04-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-05-01",
+      "model": "Seasonal naive",
+      "actual": 10319.0,
+      "prediction": 6478.0,
+      "train_through": "2024-04-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-05-01",
+      "model": "12-month drift",
+      "actual": 10319.0,
+      "prediction": 9619.8181818182,
+      "train_through": "2024-04-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-05-01",
+      "model": "Random forest",
+      "actual": 10319.0,
+      "prediction": 8413.25941607,
+      "train_through": "2024-04-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-06-01",
+      "model": "Naive",
+      "actual": 10179.0,
+      "prediction": 10319.0,
+      "train_through": "2024-05-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-06-01",
+      "model": "Day-adjusted naive",
+      "actual": 10179.0,
+      "prediction": 9986.1290322581,
+      "train_through": "2024-05-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-06-01",
+      "model": "Seasonal naive",
+      "actual": 10179.0,
+      "prediction": 6315.0,
+      "train_through": "2024-05-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-06-01",
+      "model": "12-month drift",
+      "actual": 10179.0,
+      "prediction": 10683.0,
+      "train_through": "2024-05-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-06-01",
+      "model": "Random forest",
+      "actual": 10179.0,
+      "prediction": 8995.3424781746,
+      "train_through": "2024-05-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-07-01",
+      "model": "Naive",
+      "actual": 11230.0,
+      "prediction": 10179.0,
+      "train_through": "2024-06-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-07-01",
+      "model": "Day-adjusted naive",
+      "actual": 11230.0,
+      "prediction": 10518.3,
+      "train_through": "2024-06-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-07-01",
+      "model": "Seasonal naive",
+      "actual": 11230.0,
+      "prediction": 6779.0,
+      "train_through": "2024-06-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-07-01",
+      "model": "12-month drift",
+      "actual": 11230.0,
+      "prediction": 10488.0909090909,
+      "train_through": "2024-06-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-07-01",
+      "model": "Random forest",
+      "actual": 11230.0,
+      "prediction": 9380.9594424603,
+      "train_through": "2024-06-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-08-01",
+      "model": "Naive",
+      "actual": 10354.0,
+      "prediction": 11230.0,
+      "train_through": "2024-07-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-08-01",
+      "model": "Day-adjusted naive",
+      "actual": 10354.0,
+      "prediction": 11230.0,
+      "train_through": "2024-07-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-08-01",
+      "model": "Seasonal naive",
+      "actual": 10354.0,
+      "prediction": 7067.0,
+      "train_through": "2024-07-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-08-01",
+      "model": "12-month drift",
+      "actual": 10354.0,
+      "prediction": 11608.4545454545,
+      "train_through": "2024-07-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-08-01",
+      "model": "Random forest",
+      "actual": 10354.0,
+      "prediction": 9890.83375,
+      "train_through": "2024-07-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-09-01",
+      "model": "Naive",
+      "actual": 10153.0,
+      "prediction": 10354.0,
+      "train_through": "2024-08-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-09-01",
+      "model": "Day-adjusted naive",
+      "actual": 10153.0,
+      "prediction": 10020.0,
+      "train_through": "2024-08-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-09-01",
+      "model": "Seasonal naive",
+      "actual": 10153.0,
+      "prediction": 7237.0,
+      "train_through": "2024-08-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-09-01",
+      "model": "12-month drift",
+      "actual": 10153.0,
+      "prediction": 10637.3636363636,
+      "train_through": "2024-08-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-09-01",
+      "model": "Random forest",
+      "actual": 10153.0,
+      "prediction": 10079.5787447691,
+      "train_through": "2024-08-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-10-01",
+      "model": "Naive",
+      "actual": 11024.0,
+      "prediction": 10153.0,
+      "train_through": "2024-09-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-10-01",
+      "model": "Day-adjusted naive",
+      "actual": 11024.0,
+      "prediction": 10491.4333333333,
+      "train_through": "2024-09-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-10-01",
+      "model": "Seasonal naive",
+      "actual": 11024.0,
+      "prediction": 7608.0,
+      "train_through": "2024-09-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-10-01",
+      "model": "12-month drift",
+      "actual": 11024.0,
+      "prediction": 10384.3636363636,
+      "train_through": "2024-09-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-10-01",
+      "model": "Random forest",
+      "actual": 11024.0,
+      "prediction": 10164.9282166306,
+      "train_through": "2024-09-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-11-01",
+      "model": "Naive",
+      "actual": 10726.0,
+      "prediction": 11024.0,
+      "train_through": "2024-10-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-11-01",
+      "model": "Day-adjusted naive",
+      "actual": 10726.0,
+      "prediction": 10668.3870967742,
+      "train_through": "2024-10-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-11-01",
+      "model": "Seasonal naive",
+      "actual": 10726.0,
+      "prediction": 7245.0,
+      "train_through": "2024-10-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-11-01",
+      "model": "12-month drift",
+      "actual": 10726.0,
+      "prediction": 11367.5454545455,
+      "train_through": "2024-10-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-11-01",
+      "model": "Random forest",
+      "actual": 10726.0,
+      "prediction": 10347.9925378788,
+      "train_through": "2024-10-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-12-01",
+      "model": "Naive",
+      "actual": 11772.0,
+      "prediction": 10726.0,
+      "train_through": "2024-11-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-12-01",
+      "model": "Day-adjusted naive",
+      "actual": 11772.0,
+      "prediction": 11083.5333333333,
+      "train_through": "2024-11-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-12-01",
+      "model": "Seasonal naive",
+      "actual": 11772.0,
+      "prediction": 7778.0,
+      "train_through": "2024-11-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-12-01",
+      "model": "12-month drift",
+      "actual": 11772.0,
+      "prediction": 10994.0,
+      "train_through": "2024-11-01"
+    },
+    {
+      "split": "Test",
+      "date": "2024-12-01",
+      "model": "Random forest",
+      "actual": 11772.0,
+      "prediction": 10487.2944539488,
+      "train_through": "2024-11-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-01-01",
+      "model": "Naive",
+      "actual": 12122.0,
+      "prediction": 11772.0,
+      "train_through": "2024-12-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-01-01",
+      "model": "Day-adjusted naive",
+      "actual": 12122.0,
+      "prediction": 11772.0,
+      "train_through": "2024-12-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-01-01",
+      "model": "Seasonal naive",
+      "actual": 12122.0,
+      "prediction": 7768.0,
+      "train_through": "2024-12-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-01-01",
+      "model": "12-month drift",
+      "actual": 12122.0,
+      "prediction": 12136.0,
+      "train_through": "2024-12-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-01-01",
+      "model": "Random forest",
+      "actual": 12122.0,
+      "prediction": 10828.7471852176,
+      "train_through": "2024-12-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-02-01",
+      "model": "Naive",
+      "actual": 10382.0,
+      "prediction": 12122.0,
+      "train_through": "2025-01-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-02-01",
+      "model": "Day-adjusted naive",
+      "actual": 10382.0,
+      "prediction": 10948.9032258065,
+      "train_through": "2025-01-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-02-01",
+      "model": "Seasonal naive",
+      "actual": 10382.0,
+      "prediction": 8240.0,
+      "train_through": "2025-01-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-02-01",
+      "model": "12-month drift",
+      "actual": 10382.0,
+      "prediction": 12474.9090909091,
+      "train_through": "2025-01-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-02-01",
+      "model": "Random forest",
+      "actual": 10382.0,
+      "prediction": 11110.2779661172,
+      "train_through": "2025-01-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-03-01",
+      "model": "Naive",
+      "actual": 12497.0,
+      "prediction": 10382.0,
+      "train_through": "2025-02-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-03-01",
+      "model": "Day-adjusted naive",
+      "actual": 12497.0,
+      "prediction": 11494.3571428571,
+      "train_through": "2025-02-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-03-01",
+      "model": "Seasonal naive",
+      "actual": 12497.0,
+      "prediction": 9360.0,
+      "train_through": "2025-02-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-03-01",
+      "model": "12-month drift",
+      "actual": 12497.0,
+      "prediction": 10474.9090909091,
+      "train_through": "2025-02-01"
+    },
+    {
+      "split": "Test",
+      "date": "2025-03-01",
+      "model": "Random forest",
+      "actual": 12497.0,
+      "prediction": 10888.4494235487,
+      "train_through": "2025-02-01"
+    }
+  ],
+  "metrics": [
+    {
+      "split": "Test",
+      "model": "12-month drift",
+      "n": 12,
+      "MAE": 845.6439393939,
+      "RMSE": 1043.745475568,
+      "WAPE_pct": 7.7989849617,
+      "selected_on_validation": false
+    },
+    {
+      "split": "Test",
+      "model": "Day-adjusted naive",
+      "n": 12,
+      "MAE": 505.0637864823,
+      "RMSE": 580.9571664534,
+      "WAPE_pct": 4.6579709166,
+      "selected_on_validation": true
+    },
+    {
+      "split": "Test",
+      "model": "Naive",
+      "n": 12,
+      "MAE": 804.25,
+      "RMSE": 1017.3654292665,
+      "WAPE_pct": 7.4172277045,
+      "selected_on_validation": false
+    },
+    {
+      "split": "Test",
+      "model": "Random forest",
+      "n": 12,
+      "MAE": 1077.7745472849,
+      "RMSE": 1214.5003323258,
+      "WAPE_pct": 9.9398187521,
+      "selected_on_validation": false
+    },
+    {
+      "split": "Test",
+      "model": "Seasonal naive",
+      "n": 12,
+      "MAE": 3490.9166666667,
+      "RMSE": 3547.0101141666,
+      "WAPE_pct": 32.1951182022,
+      "selected_on_validation": false
+    },
+    {
+      "split": "Validation",
+      "model": "12-month drift",
+      "n": 12,
+      "MAE": 376.8636363636,
+      "RMSE": 491.9323300571,
+      "WAPE_pct": 5.1259434813,
+      "selected_on_validation": false
+    },
+    {
+      "split": "Validation",
+      "model": "Day-adjusted naive",
+      "n": 12,
+      "MAE": 297.8975312075,
+      "RMSE": 394.593171033,
+      "WAPE_pct": 4.0518791437,
+      "selected_on_validation": true
+    },
+    {
+      "split": "Validation",
+      "model": "Naive",
+      "n": 12,
+      "MAE": 395.0,
+      "RMSE": 485.9561022699,
+      "WAPE_pct": 5.3726268065,
+      "selected_on_validation": false
+    },
+    {
+      "split": "Validation",
+      "model": "Random forest",
+      "n": 12,
+      "MAE": 585.7698688256,
+      "RMSE": 723.1720500758,
+      "WAPE_pct": 7.967399746,
+      "selected_on_validation": false
+    },
+    {
+      "split": "Validation",
+      "model": "Seasonal naive",
+      "n": 12,
+      "MAE": 2162.3333333333,
+      "RMSE": 2221.220272733,
+      "WAPE_pct": 29.4111646359,
+      "selected_on_validation": false
+    }
+  ],
+  "selectedTest": [
+    {
+      "split": "Test",
+      "date": "2024-04-01",
+      "model": "Day-adjusted naive",
+      "actual": 9358.0,
+      "prediction": 9058.064516129,
+      "train_through": "2024-03-01",
+      "lower": 8626.1290322581,
+      "upper": 9490.0
+    },
+    {
+      "split": "Test",
+      "date": "2024-05-01",
+      "model": "Day-adjusted naive",
+      "actual": 10319.0,
+      "prediction": 9669.9333333333,
+      "train_through": "2024-04-01",
+      "lower": 9237.9978494624,
+      "upper": 10101.8688172043
+    },
+    {
+      "split": "Test",
+      "date": "2024-06-01",
+      "model": "Day-adjusted naive",
+      "actual": 10179.0,
+      "prediction": 9986.1290322581,
+      "train_through": "2024-05-01",
+      "lower": 9554.1935483871,
+      "upper": 10418.064516129
+    },
+    {
+      "split": "Test",
+      "date": "2024-07-01",
+      "model": "Day-adjusted naive",
+      "actual": 11230.0,
+      "prediction": 10518.3,
+      "train_through": "2024-06-01",
+      "lower": 10086.364516129,
+      "upper": 10950.235483871
+    },
+    {
+      "split": "Test",
+      "date": "2024-08-01",
+      "model": "Day-adjusted naive",
+      "actual": 10354.0,
+      "prediction": 11230.0,
+      "train_through": "2024-07-01",
+      "lower": 10798.064516129,
+      "upper": 11661.935483871
+    },
+    {
+      "split": "Test",
+      "date": "2024-09-01",
+      "model": "Day-adjusted naive",
+      "actual": 10153.0,
+      "prediction": 10020.0,
+      "train_through": "2024-08-01",
+      "lower": 9588.064516129,
+      "upper": 10451.935483871
+    },
+    {
+      "split": "Test",
+      "date": "2024-10-01",
+      "model": "Day-adjusted naive",
+      "actual": 11024.0,
+      "prediction": 10491.4333333333,
+      "train_through": "2024-09-01",
+      "lower": 10059.4978494624,
+      "upper": 10923.3688172043
+    },
+    {
+      "split": "Test",
+      "date": "2024-11-01",
+      "model": "Day-adjusted naive",
+      "actual": 10726.0,
+      "prediction": 10668.3870967742,
+      "train_through": "2024-10-01",
+      "lower": 10236.4516129032,
+      "upper": 11100.3225806452
+    },
+    {
+      "split": "Test",
+      "date": "2024-12-01",
+      "model": "Day-adjusted naive",
+      "actual": 11772.0,
+      "prediction": 11083.5333333333,
+      "train_through": "2024-11-01",
+      "lower": 10651.5978494624,
+      "upper": 11515.4688172043
+    },
+    {
+      "split": "Test",
+      "date": "2025-01-01",
+      "model": "Day-adjusted naive",
+      "actual": 12122.0,
+      "prediction": 11772.0,
+      "train_through": "2024-12-01",
+      "lower": 11340.064516129,
+      "upper": 12203.935483871
+    },
+    {
+      "split": "Test",
+      "date": "2025-02-01",
+      "model": "Day-adjusted naive",
+      "actual": 10382.0,
+      "prediction": 10948.9032258065,
+      "train_through": "2025-01-01",
+      "lower": 10516.9677419355,
+      "upper": 11380.8387096774
+    },
+    {
+      "split": "Test",
+      "date": "2025-03-01",
+      "model": "Day-adjusted naive",
+      "actual": 12497.0,
+      "prediction": 11494.3571428571,
+      "train_through": "2025-02-01",
+      "lower": 11062.4216589862,
+      "upper": 11926.2926267281
+    }
+  ],
+  "forecastSummary": {
+    "selected_model": "Day-adjusted naive",
+    "selection_metric": "Validation MAE; Apr2023-Mar2024",
+    "test_period": "Apr2024-Mar2025, rolling one-step ahead",
+    "next_month": "2025-04-01",
+    "forecast_vintage": "retrospective monthly data cutoff 2025-03-31; publication vintages not reconstructed",
+    "next_prediction": 12093.870967741936,
+    "heuristic_band_half_width": 431.9354838709678,
+    "next_lower": 11661.935483870968,
+    "next_upper": 12525.806451612903,
+    "test_band_coverage": 0.4166666666666667,
+    "band_warning": "80th percentile of 12 validation absolute errors; not a calibrated confidence interval"
+  },
+  "capacity": [
+    {
+      "from": "DDU",
+      "to": "Allahabad",
+      "passenger_trains_day": 110,
+      "freight_trains_day": 74,
+      "other_trains_day": 10,
+      "nominal_capacity_trains_day": 150,
+      "reported_utilization_pct": 148,
+      "period": "FY2022-23 (partly post-DFC)",
+      "source_id": "S3",
+      "printed_page": 85,
+      "route_note": "direct parallel",
+      "section": "DDU\u2013Allahabad",
+      "total_trains": 194,
+      "implied_effective_capacity": 131.0810810811,
+      "required_diversion_share_to_100": 0.8502556611,
+      "util_at_0pct_diversion": 148.0,
+      "util_at_25pct_diversion": 133.8865979381,
+      "util_at_50pct_diversion": 119.7731958763,
+      "util_at_75pct_diversion": 105.6597938144,
+      "util_at_100pct_diversion": 91.5463917526
+    },
+    {
+      "from": "Allahabad",
+      "to": "Kanpur",
+      "passenger_trains_day": 110,
+      "freight_trains_day": 74,
+      "other_trains_day": 10,
+      "nominal_capacity_trains_day": 150,
+      "reported_utilization_pct": 148,
+      "period": "FY2022-23 (partly post-DFC)",
+      "source_id": "S3",
+      "printed_page": 85,
+      "route_note": "direct parallel",
+      "section": "Allahabad\u2013Kanpur",
+      "total_trains": 194,
+      "implied_effective_capacity": 131.0810810811,
+      "required_diversion_share_to_100": 0.8502556611,
+      "util_at_0pct_diversion": 148.0,
+      "util_at_25pct_diversion": 133.8865979381,
+      "util_at_50pct_diversion": 119.7731958763,
+      "util_at_75pct_diversion": 105.6597938144,
+      "util_at_100pct_diversion": 91.5463917526
+    },
+    {
+      "from": "Kanpur",
+      "to": "Tundla",
+      "passenger_trains_day": 136,
+      "freight_trains_day": 32,
+      "other_trains_day": 20,
+      "nominal_capacity_trains_day": 162,
+      "reported_utilization_pct": 129,
+      "period": "FY2022-23 (partly post-DFC)",
+      "source_id": "S3",
+      "printed_page": 85,
+      "route_note": "direct parallel",
+      "section": "Kanpur\u2013Tundla",
+      "total_trains": 188,
+      "implied_effective_capacity": 145.7364341085,
+      "required_diversion_share_to_100": 1.3207364341,
+      "util_at_0pct_diversion": 129.0,
+      "util_at_25pct_diversion": 123.5106382979,
+      "util_at_50pct_diversion": 118.0212765957,
+      "util_at_75pct_diversion": 112.5319148936,
+      "util_at_100pct_diversion": 107.0425531915
+    },
+    {
+      "from": "Tundla",
+      "to": "Khurja",
+      "passenger_trains_day": 136,
+      "freight_trains_day": 42,
+      "other_trains_day": 20,
+      "nominal_capacity_trains_day": 176,
+      "reported_utilization_pct": 129,
+      "period": "FY2022-23 (partly post-DFC)",
+      "source_id": "S3",
+      "printed_page": 85,
+      "route_note": "direct parallel",
+      "section": "Tundla\u2013Khurja",
+      "total_trains": 198,
+      "implied_effective_capacity": 153.488372093,
+      "required_diversion_share_to_100": 1.0598006645,
+      "util_at_0pct_diversion": 129.0,
+      "util_at_25pct_diversion": 122.1590909091,
+      "util_at_50pct_diversion": 115.3181818182,
+      "util_at_75pct_diversion": 108.4772727273,
+      "util_at_100pct_diversion": 101.6363636364
+    },
+    {
+      "from": "Khurja",
+      "to": "Dadri",
+      "passenger_trains_day": 128,
+      "freight_trains_day": 52,
+      "other_trains_day": 20,
+      "nominal_capacity_trains_day": 182,
+      "reported_utilization_pct": 126,
+      "period": "FY2022-23 (partly post-DFC)",
+      "source_id": "S3",
+      "printed_page": 85,
+      "route_note": "direct parallel",
+      "section": "Khurja\u2013Dadri",
+      "total_trains": 200,
+      "implied_effective_capacity": 158.7301587302,
+      "required_diversion_share_to_100": 0.7936507937,
+      "util_at_0pct_diversion": 126.0,
+      "util_at_25pct_diversion": 117.81,
+      "util_at_50pct_diversion": 109.62,
+      "util_at_75pct_diversion": 101.43,
+      "util_at_100pct_diversion": 93.24
+    },
+    {
+      "from": "Khurja",
+      "to": "Saharanpur",
+      "passenger_trains_day": 128,
+      "freight_trains_day": 60,
+      "other_trains_day": 20,
+      "nominal_capacity_trains_day": 164,
+      "reported_utilization_pct": 145,
+      "period": "FY2022-23 (partly post-DFC)",
+      "source_id": "S3",
+      "printed_page": 85,
+      "route_note": "via Delhi-Ambala",
+      "section": "Khurja\u2013Saharanpur",
+      "total_trains": 208,
+      "implied_effective_capacity": 143.4482758621,
+      "required_diversion_share_to_100": 1.075862069,
+      "util_at_0pct_diversion": 145.0,
+      "util_at_25pct_diversion": 134.5432692308,
+      "util_at_50pct_diversion": 124.0865384615,
+      "util_at_75pct_diversion": 113.6298076923,
+      "util_at_100pct_diversion": 103.1730769231
+    },
+    {
+      "from": "Saharanpur",
+      "to": "Ludhiana",
+      "passenger_trains_day": 122,
+      "freight_trains_day": 68,
+      "other_trains_day": 16,
+      "nominal_capacity_trains_day": 148,
+      "reported_utilization_pct": 159,
+      "period": "FY2022-23 (partly post-DFC)",
+      "source_id": "S3",
+      "printed_page": 85,
+      "route_note": "direct parallel",
+      "section": "Saharanpur\u2013Ludhiana",
+      "total_trains": 206,
+      "implied_effective_capacity": 129.5597484277,
+      "required_diversion_share_to_100": 1.1241213467,
+      "util_at_0pct_diversion": 159.0,
+      "util_at_25pct_diversion": 145.8786407767,
+      "util_at_50pct_diversion": 132.7572815534,
+      "util_at_75pct_diversion": 119.6359223301,
+      "util_at_100pct_diversion": 106.5145631068
+    },
+    {
+      "from": "DDU",
+      "to": "Lucknow",
+      "passenger_trains_day": 66,
+      "freight_trains_day": 46,
+      "other_trains_day": 16,
+      "nominal_capacity_trains_day": 52,
+      "reported_utilization_pct": 281,
+      "period": "FY2022-23 (partly post-DFC)",
+      "source_id": "S3",
+      "printed_page": 85,
+      "route_note": "alternative route",
+      "section": "DDU\u2013Lucknow",
+      "total_trains": 128,
+      "implied_effective_capacity": 45.5516014235,
+      "required_diversion_share_to_100": 1.7923564908,
+      "util_at_0pct_diversion": 281.0,
+      "util_at_25pct_diversion": 255.75390625,
+      "util_at_50pct_diversion": 230.5078125,
+      "util_at_75pct_diversion": 205.26171875,
+      "util_at_100pct_diversion": 180.015625
+    },
+    {
+      "from": "Lucknow",
+      "to": "Moradabad",
+      "passenger_trains_day": 130,
+      "freight_trains_day": 66,
+      "other_trains_day": 20,
+      "nominal_capacity_trains_day": 110,
+      "reported_utilization_pct": 224,
+      "period": "FY2022-23 (partly post-DFC)",
+      "source_id": "S3",
+      "printed_page": 85,
+      "route_note": "alternative route",
+      "section": "Lucknow\u2013Moradabad",
+      "total_trains": 216,
+      "implied_effective_capacity": 96.4285714286,
+      "required_diversion_share_to_100": 1.8116883117,
+      "util_at_0pct_diversion": 224.0,
+      "util_at_25pct_diversion": 206.8888888889,
+      "util_at_50pct_diversion": 189.7777777778,
+      "util_at_75pct_diversion": 172.6666666667,
+      "util_at_100pct_diversion": 155.5555555556
+    },
+    {
+      "from": "Moradabad",
+      "to": "Saharanpur",
+      "passenger_trains_day": 78,
+      "freight_trains_day": 62,
+      "other_trains_day": 20,
+      "nominal_capacity_trains_day": 110,
+      "reported_utilization_pct": 166,
+      "period": "FY2022-23 (partly post-DFC)",
+      "source_id": "S3",
+      "printed_page": 85,
+      "route_note": "alternative route",
+      "section": "Moradabad\u2013Saharanpur",
+      "total_trains": 160,
+      "implied_effective_capacity": 96.3855421687,
+      "required_diversion_share_to_100": 1.0260396424,
+      "util_at_0pct_diversion": 166.0,
+      "util_at_25pct_diversion": 149.91875,
+      "util_at_50pct_diversion": 133.8375,
+      "util_at_75pct_diversion": 117.75625,
+      "util_at_100pct_diversion": 101.675
+    }
+  ],
+  "cost": [
+    {
+      "scenario": "Low",
+      "hours_saved": 0.25,
+      "cash_realization": 0.2,
+      "gross_time_value_crore": 0.75,
+      "realized_benefit_crore": 0.15000000000000002,
+      "annual_net_crore": -0.14999999999999997,
+      "first_year_net_crore": -0.55,
+      "payback_months": null
+    },
+    {
+      "scenario": "Base",
+      "hours_saved": 1,
+      "cash_realization": 0.4,
+      "gross_time_value_crore": 3.0,
+      "realized_benefit_crore": 1.2000000000000002,
+      "annual_net_crore": 0.9000000000000001,
+      "first_year_net_crore": 0.5000000000000001,
+      "payback_months": 5.333333333333333
+    },
+    {
+      "scenario": "High",
+      "hours_saved": 1.5,
+      "cash_realization": 0.6,
+      "gross_time_value_crore": 4.5,
+      "realized_benefit_crore": 2.6999999999999997,
+      "annual_net_crore": 2.4,
+      "first_year_net_crore": 2.0,
+      "payback_months": 2.0
+    }
+  ],
+  "assumptions": {
+    "trains_per_day": 20,
+    "operating_days": 300,
+    "value_per_train_hour_inr": 5000,
+    "capital_cost_crore": 0.4,
+    "annual_opex_crore": 0.3,
+    "base_hours_saved": 1,
+    "base_cash_realization": 0.4,
+    "status": "All inputs hypothetical; not measured DFCCIL costs or savings"
+  },
+  "cards": [
+    {
+      "id": "E01",
+      "source_id": "S1",
+      "theme": "Throughput",
+      "title": "Observed train growth",
+      "summary": "DFC reported 88225 train movements in FY2023-24 and 130116 in FY2024-25. This is 47.5 percent growth. Network expansion and diversion contribute to growth, so growth alone is not productivity or a causal estimate of decongestion.",
+      "locator": "DFCCIL Annual Report 2024-25, printed p 48, Table 3"
+    },
+    {
+      "id": "E02",
+      "source_id": "S1",
+      "theme": "Reliability",
+      "title": "Speed and wagon turnround",
+      "summary": "EDFC monthly average speed and wagon turnround should be tracked alongside throughput. The study computes unweighted annual means from monthly values. Wagon turnround is DFCCIL's reported measure, not terminal dwell or a full Indian Railways wagon cycle.",
+      "locator": "DFCCIL Annual Report 2024-25, printed p 49, Tables 5-6"
+    },
+    {
+      "id": "E03",
+      "source_id": "S2",
+      "theme": "Data quality",
+      "title": "Conflicting speed cell",
+      "summary": "WDFC March 2023 speed is 48.7 km/h in the 2023-24 annual report and 58.7 in the 2024-25 report. The clean dataset excludes this disputed observation and retains both values for sensitivity analysis. No missing values are invented.",
+      "locator": "DFCCIL Annual Report 2023-24, Table 5; 2024-25, Table 5"
+    },
+    {
+      "id": "E04",
+      "source_id": "S3",
+      "theme": "Capacity",
+      "title": "Conventional line capacity",
+      "summary": "World Bank Table 5 reports FY2022-23 conventional line passenger, freight and other train volumes with capacity utilization. This period already includes some DFC operation. Diversion scenarios use these historical loads and equal train weights; they do not measure current released paths.",
+      "locator": "World Bank ICR00006390, Annex 4, printed p 85, Table 5"
+    },
+    {
+      "id": "E05",
+      "source_id": "S4",
+      "theme": "Comparability",
+      "title": "National speed benchmark",
+      "summary": "Indian Railways Year Book 2023-24 reports broad-gauge all-traction goods train speeds of 37.8, 30.8 and 25.0 km/h for FY2021-22, FY2022-23 andFY2023-24. Coverage differs from corridor monthly means. A difference between these figures is not a matched causal treatment effect.",
+      "locator": "Indian Railways Year Book 2023-24, printed p 48, sectionF"
+    },
+    {
+      "id": "E06",
+      "source_id": "S5",
+      "theme": "Data quality",
+      "title": "Independent publication cross-check",
+      "summary": "PIB's 2024 year-end review reports October 2024 DFC train movements of 11024, gross tonne-kilometres of 16731 million, and corridor speeds of 44.6 and 51.3 km/h. These agree with the annual report cells. Both publications ultimately depend on railway administrative reporting.",
+      "locator": "PIB29December 2024, DFC progress table"
+    },
+    {
+      "id": "E07",
+      "source_id": "S6",
+      "theme": "Connectivity",
+      "title": "Terminals and first and last mile",
+      "summary": "BRIEF's NITI-funded study identifies infrastructure, operational efficiency and first and last-mile connectivity as constraints. This supports investigating terminal interfaces alongside mainline capacity. The study's recommendations and stakeholder perceptions do not establish the causes of this project's observed speed changes.",
+      "locator": "BRIEF, Improving rail efficiency and share in India's freight transport, executive summary and chapter 6"
+    },
+    {
+      "id": "E08",
+      "source_id": "S7",
+      "theme": "Evaluation",
+      "title": "Targets versus outcomes",
+      "summary": "JICA's 2017 ex-ante evaluation sets anticipated DFC transport and operational benefits. An appraisal target is an expected future outcome, not an achieved benefit. This project keeps planned targets separate from reported operational observations.",
+      "locator": "JICA2017 ex-ante evaluation, Dedicated Freight Corridor Project"
+    },
+    {
+      "id": "E09",
+      "source_id": "S8",
+      "theme": "Forecasting",
+      "title": "Preventing temporal leakage",
+      "summary": "Time series cross-validation evaluates forecasts using only observations available before each forecast origin. This project uses April 2023-March 2024 for model selection and April 2024-March 2025 for rolling one-month test forecasts. A historical data cutoff is not a reconstruction of publication availability.",
+      "locator": "Hyndman and Athanasopoulos 2021, chapter 5.10"
+    },
+    {
+      "id": "E10",
+      "source_id": "S9",
+      "theme": "Forecasting",
+      "title": "Random forest limitations",
+      "summary": "A random forest averages decision-tree predictions. This project's small random forest uses lagged train counts and known calendar information. Trees can struggle to extrapolate a growing series; model choice must depend on temporal validation rather than the complexity of the model.",
+      "locator": "scikit-learn user guide, section 1.11.2"
+    },
+    {
+      "id": "E11",
+      "source_id": "S10",
+      "theme": "Connectivity",
+      "title": "Integrated logistics",
+      "summary": "The World Bank's 2022 Rail Logistics project announcement emphasizes multimodal hubs, terminal links and first and last-mile connectivity. These priorities inform the proposed coordination pilot. Announced financing and expected benefits are not savings measured by this assignment.",
+      "locator": "World Bank 10June 2022 rail logistics press release"
+    }
+  ],
+  "textAnalysis": [
+    {
+      "card_id": "E01",
+      "source_id": "S1",
+      "theme": "Throughput",
+      "top_terms": "growth; 47 percent; growth productivity; growth network; growth growth"
+    },
+    {
+      "card_id": "E02",
+      "source_id": "S1",
+      "theme": "Reliability",
+      "top_terms": "wagon; wagon turnround; turnround; monthly; edfc"
+    },
+    {
+      "card_id": "E03",
+      "source_id": "S2",
+      "theme": "Data quality",
+      "top_terms": "values; report; 2023; retains; wdfc march"
+    },
+    {
+      "card_id": "E04",
+      "source_id": "S3",
+      "theme": "Capacity",
+      "top_terms": "train; diversion scenarios; bank table; passenger; volumes capacity"
+    },
+    {
+      "card_id": "E05",
+      "source_id": "S4",
+      "theme": "Comparability",
+      "top_terms": "24; differs corridor; railways year; 24 reports; 24 coverage"
+    },
+    {
+      "card_id": "E06",
+      "source_id": "S5",
+      "theme": "Data quality",
+      "top_terms": "2024; agree annual; agree; administrative reporting; administrative"
+    },
+    {
+      "card_id": "E07",
+      "source_id": "S6",
+      "theme": "Connectivity",
+      "top_terms": "study; brief niti; brief; niti funded; niti"
+    },
+    {
+      "card_id": "E08",
+      "source_id": "S7",
+      "theme": "Evaluation",
+      "top_terms": "operational; ante; dfc transport; 2017; 2017 ex"
+    },
+    {
+      "card_id": "E09",
+      "source_id": "S8",
+      "theme": "Forecasting",
+      "top_terms": "april; forecasts; march; 2024; 2025 rolling"
+    },
+    {
+      "card_id": "E10",
+      "source_id": "S9",
+      "theme": "Forecasting",
+      "top_terms": "random forest; random; forest; model; counts known"
+    },
+    {
+      "card_id": "E11",
+      "source_id": "S10",
+      "theme": "Connectivity",
+      "top_terms": "coordination pilot; coordination; pilot; emphasizes multimodal; links"
+    }
+  ]
+};
+const C={EDFC:'#176b87',WDFC:'#c56634',Observed:'#176b87',Forecast:'#c56634',Base:'#82949d'};
+const $=id=>document.getElementById(id);const fmt=(x,n=0)=>Number(x).toLocaleString('en-IN',{maximumFractionDigits:n,minimumFractionDigits:n});
+const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function svgWrap(content,w=680,h=280){return `<svg class="chart" role="img" viewBox="0 0 ${w} ${h}">${content}</svg>`}
+function lineChart(id,series,labels,{zero=false,h=280,unit=''}={}){let w=680,p={l:64,r:18,t:18,b:48},vals=series.flatMap(s=>s.values.filter(v=>v!==null&&Number.isFinite(v)));if(!vals.length){$(id).innerHTML='<p class="note">No audited observations in this selection.</p>';return;}let span=Math.max(...vals)-Math.min(...vals),lo=zero?0:Math.min(...vals)-Math.max(span*.1,.1),hi=Math.max(...vals)+Math.max(span*.07,.1);if(hi===lo)hi=lo+1;const x=i=>p.l+i*(w-p.l-p.r)/Math.max(1,labels.length-1),y=v=>h-p.b-(v-lo)/(hi-lo)*(h-p.b-p.t);let s='';for(let k=0;k<=4;k++){let v=lo+(hi-lo)*k/4,yy=y(v);s+=`<line class="gridline" x1="${p.l}" x2="${w-p.r}" y1="${yy}" y2="${yy}"/><text x="${p.l-10}" y="${yy+4}" text-anchor="end">${fmt(v,hi<10?1:0)}</text>`}let step=Math.max(1,Math.ceil(labels.length/6));labels.forEach((l,i)=>{if(i%step===0||i===labels.length-1)s+=`<text x="${x(i)}" y="${h-20}" text-anchor="middle">${esc(l)}</text>`});for(const a of series){let path='',active=false;a.values.forEach((v,i)=>{if(v===null||!Number.isFinite(v)){active=false;return}path+=`${active?'L':'M'}${x(i)},${y(v)} `;active=true;s+=`<circle cx="${x(i)}" cy="${y(v)}" r="3" fill="${a.color}"><title>${esc(a.name)} · ${esc(labels[i])}: ${fmt(v,2)} ${unit}</title></circle>`});s+=`<path class="trace" stroke="${a.color}" d="${path}"/>`}$(id).innerHTML=svgWrap(s,w,h)+`<div class="legend">${series.map(a=>`<span><i class="dot" style="background:${a.color}"></i>${esc(a.name)}</span>`).join('')}</div>`}
+function labelDate(d){let dt=new Date(d.slice(0,10)+'T12:00:00Z');return dt.toLocaleDateString('en-GB',{month:'short',year:'2-digit',timeZone:'UTC'})}
+function refresh(){let yr=$('year').value,c=$('corridor').value,rows=D.monthly.filter(r=>yr==='all'||r.fy_start===+yr);lineChart('growth',[{name:'Total DFC',values:rows.map(r=>r.trains),color:C.EDFC}],rows.map(r=>labelDate(r.date)),{zero:true,unit:'trains'});let data=D.corridor.filter(r=>(yr==='all'||r.fy_start===+yr)),dates=[...new Set(data.map(r=>r.date))].sort(),cs=c==='all'?['EDFC','WDFC']:[c];for(const [id,key,unit] of [['traffic','trains_per_day','trains/day'],['speed','speed_kmph','km/h'],['wtr','wtr_days','days']]){let ser=cs.map(cc=>({name:cc,color:C[cc],values:dates.map(d=>{let r=data.find(r=>r.date===d&&r.corridor===cc);return r?r[key]:null})}));lineChart(id,ser,dates.map(labelDate),{zero:id!=='speed',unit})}}
+function showForecast(){let model=$('model').value,g=D.forecast.filter(r=>r.split==='Test'&&r.model===model),m=D.metrics.find(r=>r.split==='Test'&&r.model===model);lineChart('forecast',[{name:'Observed',values:g.map(r=>r.actual),color:C.Observed},{name:model,values:g.map(r=>r.prediction),color:C.Forecast}],g.map(r=>labelDate(r.date)),{h:270,unit:'trains'});$('forecast-score').textContent=`Test MAE ${fmt(m.MAE)} trains · WAPE ${fmt(m.WAPE_pct,2)}%`;}
+function capacity(){let d=+$('diversion').value/100;$('diversion-value').textContent=fmt(d*100)+'%';let rows=D.capacity,w=1100,h=450,l=245,r=40,t=15,b=43,max=300,s='';let xx=v=>l+v/max*(w-l-r);[0,50,100,150,200,250,300].forEach(v=>{s+=`<line x1="${xx(v)}" x2="${xx(v)}" y1="${t}" y2="${h-b}" stroke="${v===100?'#c56634':'#e4e9ec'}" stroke-dasharray="${v===100?'5 4':'0'}"/><text x="${xx(v)}" y="${h-22}" text-anchor="middle">${v}%</text>`});rows.forEach((a,i)=>{let yy=t+18+i*38,u=a.reported_utilization_pct*(a.total_trains-d*a.freight_trains_day)/a.total_trains;s+=`<text x="${l-10}" y="${yy+8}" text-anchor="end">${esc(a.section)}</text><rect x="${l}" y="${yy-8}" width="${xx(a.reported_utilization_pct)-l}" height="8" fill="#9baab1"/><rect x="${l}" y="${yy+3}" width="${xx(u)-l}" height="10" fill="#176b87"><title>${esc(a.section)}: ${fmt(u,1)}% hypothetical</title></rect><text x="${xx(u)+7}" y="${yy+13}">${fmt(u,1)}</text>`});$('capacity').innerHTML=svgWrap(s,w,h)+'<div class="legend"><span><i class="dot" style="background:#9baab1"></i>Reported historical utilization</span><span><i class="dot" style="background:#176b87"></i>Scenario utilization</span></div>';let a=rows[0],u=a.reported_utilization_pct*(a.total_trains-d*a.freight_trains_day)/a.total_trains;$('capacity-readout').textContent=`DDU–Allahabad moves from 148.0% to ${fmt(u,1)}% in this scenario. Equal-weight diversion of about 85.0% would be required to reach 100%. This is a historical arithmetic exercise, not an observed current result.`}
+function cost(){let h=+$('hours').value,r=+$('realization').value/100;$('hours-value').textContent=fmt(h,2)+' hours';$('realization-value').textContent=fmt(r*100)+'%';let net=3*h*r-.7,annual=3*h*r-.3;$('cost-output').textContent=`INR ${fmt(net,2)} crore first-year net · INR ${fmt(annual,2)} crore annual net after setup`;let hs=Array.from({length:21},(_,i)=>i/10);lineChart('cost',[{name:'First-year net at selected realization',values:hs.map(a=>3*a*r-.7),color:C.EDFC},{name:'Break-even',values:hs.map(()=>0),color:C.WDFC}],hs.map(a=>a.toFixed(1)),{h:240,unit:'crore'});}
+const sources=[['S1','DFCCIL (2025). Annual report 2024–25','https://dfccil.com/images/uploads/img/DFCCIL-Annual-Report-2024-25-19112025_LR6E.pdf'],['S2','DFCCIL (2024). Annual report 2023–24','https://dfccil.com/images/uploads/img/DFCCIL-Annual-Report-2024_Final_3M0F.pdf'],['S3','World Bank (2024). EDFC implementation completion report ICR00006390','https://documents1.worldbank.org/curated/en/099022724172513595/pdf/BOSIB1e46d36ba0201af8417b8b2ecd7db3.pdf'],['S4','Ministry of Railways. Indian Railways year book 2023–24','https://nfr.indianrailways.gov.in/railwayboard/uploads/directorate/stat_econ/2025/IR%20Year%20Book%202023-24-English.pdf'],['S5','Ministry of Railways (2024). Year end review 2024, PIB','https://www.pib.gov.in/PressReleasePage.aspx?PRID=2088668'],['S6','BRIEF. Improving rail efficiency and share in India’s freight transport','https://www.niti.gov.in/sites/default/files/2023-03/Efficiency%20and%20competitiveness%20of%20Indian%20Railways.pdf'],['S7','JICA (2017). DFC procurement of electric locomotives ex-ante evaluation','https://www2.jica.go.jp/en/evaluation/pdf/2017_ID-P261_1_f.pdf'],['S8','Hyndman & Athanasopoulos (2021). Forecasting principles and practice, 3rd ed.','https://otexts.com/fpp3/tscv.html'],['S9','scikit-learn developers. Ensemble methods user guide','https://scikit-learn.org/stable/modules/ensemble.html#forest'],['S10','World Bank (2022). Rail logistics project announcement','https://www.worldbank.org/en/news/press-release/2022/06/10/world-bank-provides-245-million-to-help-indian-railways-carry-more-freight-reduce-ghg-emissions']];
+function tokenize(text){const stop=new Set('the a an is are and of to in on for with this what how why was were does can from as by it be'.split(' '));return text.toLowerCase().replace(/congestion/g,'capacity').replace(/forecasting|forecasts/g,'forecast').match(/[a-z]{2,}/g)?.filter(w=>!stop.has(w))||[]}
+const docs=D.cards.map(c=>tokenize(c.title+' '+c.summary)),vocab=[...new Set(docs.flat())],idf=Object.fromEntries(vocab.map(t=>[t,Math.log((1+docs.length)/(1+docs.filter(d=>d.includes(t)).length))+1]));function vector(tokens){let v={};tokens.forEach(t=>{if(idf[t])v[t]=(v[t]||0)+idf[t]});let n=Math.sqrt(Object.values(v).reduce((a,b)=>a+b*b,0));if(n)Object.keys(v).forEach(t=>v[t]/=n);return v}const vectors=docs.map(vector);
+function ask(e){if(e)e.preventDefault();let q=vector(tokenize($('question').value)),rank=vectors.map((v,i)=>({i,score:Object.keys(q).reduce((s,t)=>s+q[t]*(v[t]||0),0)})).sort((a,b)=>b.score-a.score);if(!rank.length||rank[0].score<.12){$('answer').textContent='The curated evidence does not provide a reliable match. Please consult the source documents or ask about capacity, speed, turnround, forecasting or terminals.';return}let hits=rank.filter(r=>r.score>=.12).slice(0,2);$('answer').innerHTML=hits.map(r=>{let c=D.cards[r.i],src=sources.find(s=>s[0]===c.source_id);return `<p><strong>${esc(c.title)}</strong><br>${esc(c.summary)}<br><small>${esc(c.locator)} · <a href="${src[2]}" target="_blank" rel="noopener">${c.source_id}</a></small></p>`}).join('')}
+$('model').innerHTML=[...new Set(D.metrics.map(r=>r.model))].map(m=>`<option ${m===D.forecastSummary.selected_model?'selected':''}>${esc(m)}</option>`).join('');$('model-table').innerHTML='<tr><th>Model</th><th>Validation MAE</th><th>Test MAE</th><th>Test WAPE</th></tr>'+[...new Set(D.metrics.map(r=>r.model))].map(m=>{let a=D.metrics.find(r=>r.model===m&&r.split==='Validation'),b=D.metrics.find(r=>r.model===m&&r.split==='Test');return `<tr><td>${esc(m)}${a.selected_on_validation?' ✓ selected':''}</td><td>${fmt(a.MAE,1)}</td><td>${fmt(b.MAE,1)}</td><td>${fmt(b.WAPE_pct,2)}%</td></tr>`}).join('');$('sources').innerHTML=sources.map(s=>`<li><a href="${s[2]}" target="_blank" rel="noopener">${s[0]} · ${s[1]}</a></li>`).join('');$('text-summary').innerHTML='<table><tr><th>Card</th><th>Theme</th><th>Distinctive TF-IDF terms</th></tr>'+D.textAnalysis.map(r=>`<tr><td>${r.card_id}</td><td>${r.theme}</td><td>${esc(r.top_terms)}</td></tr>`).join('')+'</table>';
+$('year').onchange=refresh;$('corridor').onchange=refresh;$('model').onchange=showForecast;$('diversion').oninput=capacity;$('hours').oninput=cost;$('realization').oninput=cost;$('ask').onsubmit=ask;document.querySelectorAll('[data-question]').forEach(b=>b.onclick=()=>{$('question').value=b.dataset.question;ask()});$('download').onclick=()=>{let csv='date,fy_start,trains,source\n'+D.monthly.map(r=>`${r.date.slice(0,10)},${r.fy_start},${r.trains},DFCCIL_2024_25_Table3`).join('\n'),a=document.createElement('a'),url=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.href=url;a.download='DFC_total_trains_monthly.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};refresh();showForecast();capacity();cost();
+</script></body></html>

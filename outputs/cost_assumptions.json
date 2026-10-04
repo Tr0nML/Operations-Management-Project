@@ -1,0 +1,10 @@
+{
+  "trains_per_day": 20,
+  "operating_days": 300,
+  "value_per_train_hour_inr": 5000,
+  "capital_cost_crore": 0.4,
+  "annual_opex_crore": 0.3,
+  "base_hours_saved": 1,
+  "base_cash_realization": 0.4,
+  "status": "All inputs hypothetical; not measured DFCCIL costs or savings"
+}

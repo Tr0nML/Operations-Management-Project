@@ -1,0 +1,22 @@
+{
+  "checked_on": "2026-10-04",
+  "report_pages": 12,
+  "report_body_font": "Times New Roman 12 pt",
+  "report_body_line_spacing": 1.5,
+  "report_margins_inches": 1,
+  "presentation_slides": 10,
+  "presentation_native_charts": 5,
+  "dashboard_visuals": 7,
+  "source_count": 10,
+  "complete_analysis_rerun": "passed; see reproduction_run.log",
+  "extraction_and_analysis_checks": "passed",
+  "dashboard_interactions": "passed; see dashboard_checks.json",
+  "evidence_query_and_abstention": "passed",
+  "visual_review": "Final report, slides and supporting documents reviewed",
+  "remaining_student_actions": [
+    "Add name and roll number",
+    "Review the analysis and record the approximately three-minute personal video",
+    "Upload the folder and video to the required repository or Drive location",
+    "Add and test the actual submission URL and submit to the LMS"
+  ]
+}

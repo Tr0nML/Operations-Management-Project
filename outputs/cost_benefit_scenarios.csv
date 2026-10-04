@@ -1,0 +1,4 @@
+scenario,hours_saved,cash_realization,gross_time_value_crore,realized_benefit_crore,annual_net_crore,first_year_net_crore,payback_months
+Low,0.25,0.2,0.75,0.15000000000000002,-0.14999999999999997,-0.55,
+Base,1.0,0.4,3.0,1.2000000000000002,0.9000000000000001,0.5000000000000001,5.333333333333333
+High,1.5,0.6,4.5,2.6999999999999997,2.4,2.0,2.0

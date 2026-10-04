@@ -1,0 +1,13 @@
+{
+  "selected_model": "Day-adjusted naive",
+  "selection_metric": "Validation MAE; Apr2023-Mar2024",
+  "test_period": "Apr2024-Mar2025, rolling one-step ahead",
+  "next_month": "2025-04-01",
+  "forecast_vintage": "retrospective monthly data cutoff 2025-03-31; publication vintages not reconstructed",
+  "next_prediction": 12093.870967741936,
+  "heuristic_band_half_width": 431.9354838709678,
+  "next_lower": 11661.935483870968,
+  "next_upper": 12525.806451612903,
+  "test_band_coverage": 0.4166666666666667,
+  "band_warning": "80th percentile of 12 validation absolute errors; not a calibrated confidence interval"
+}

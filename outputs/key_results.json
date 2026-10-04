@@ -1,0 +1,13 @@
+{
+  "train_growth_pct": 47.48200623406065,
+  "gtkm_growth_pct": 61.29205560405615,
+  "EDFC_speed_latest": 41.65,
+  "EDFC_speed_prior": 45.10833333333333,
+  "EDFC_wtr_latest": 1.6433333333333333,
+  "EDFC_wtr_prior": 1.2241666666666666,
+  "EDFC_wtr_change_pct": 34.240980258679386,
+  "WDFC_speed_latest": 51.96666666666667,
+  "WDFC_wtr_latest": 0.7783333333333333,
+  "selected_forecast_model": "Day-adjusted naive",
+  "heuristic_test_coverage": 0.4166666666666667
+}

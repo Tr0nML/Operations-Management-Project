@@ -1,0 +1,12 @@
+field,unit,definition_and_limit
+date,YYYY-MM-01,Month start; India FY April-March
+fy_start,year,2024 denotes FY2024-25
+trains,count/month,Reported DFC train movements; not necessarily unique consignments
+trains_per_day,reported daily average,Corridor monthly rate; missing Apr2021-Mar2022 and Feb2023; never zero-filled
+gtkm_million,million gross tonne-km,Gross train weight multiplied by distance; not net cargo tonnes
+speed_kmph,km/h,Reported corridor monthly average; annual study means unweighted; one disputed cell excluded
+wtr_days,days,DFCCIL wagon turnround; do not equate with end-to-end IR wagon cycle or terminal dwell
+reported_utilization_pct,percent,World Bank parallel line FY2022-23 incl maintenance convention
+implied_effective_capacity,normalized train equivalents/day,Derived total trains/(reported utilization/100); not engineering line capacity
+diversion_share,fraction 0-1,Hypothetical additional share of FY2022-23 residual freight shifted; not observed
+cash_realization,fraction 0-1,Hypothetical monetizable share of valued hours saved

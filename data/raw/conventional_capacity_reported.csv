@@ -1,0 +1,11 @@
+from,to,passenger_trains_day,freight_trains_day,other_trains_day,nominal_capacity_trains_day,reported_utilization_pct,period,source_id,printed_page,route_note
+DDU,Allahabad,110,74,10,150,148,FY2022-23 (partly post-DFC),S3,85,direct parallel
+Allahabad,Kanpur,110,74,10,150,148,FY2022-23 (partly post-DFC),S3,85,direct parallel
+Kanpur,Tundla,136,32,20,162,129,FY2022-23 (partly post-DFC),S3,85,direct parallel
+Tundla,Khurja,136,42,20,176,129,FY2022-23 (partly post-DFC),S3,85,direct parallel
+Khurja,Dadri,128,52,20,182,126,FY2022-23 (partly post-DFC),S3,85,direct parallel
+Khurja,Saharanpur,128,60,20,164,145,FY2022-23 (partly post-DFC),S3,85,via Delhi-Ambala
+Saharanpur,Ludhiana,122,68,16,148,159,FY2022-23 (partly post-DFC),S3,85,direct parallel
+DDU,Lucknow,66,46,16,52,281,FY2022-23 (partly post-DFC),S3,85,alternative route
+Lucknow,Moradabad,130,66,20,110,224,FY2022-23 (partly post-DFC),S3,85,alternative route
+Moradabad,Saharanpur,78,62,20,110,166,FY2022-23 (partly post-DFC),S3,85,alternative route

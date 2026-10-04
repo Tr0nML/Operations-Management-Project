@@ -1,0 +1,9 @@
+audit_id,field,finding,decision
+D01,Table 3 annual totals,All five FY sums agree,Retain; FY2020-21 only Dec-Mar
+D02,Feb2023 corridor trains/day,141.62+80.38=222.00; total229.93,Exclude both corridor rates; retain independently reconciled total train count6438
+D03,FY2023-24 Table 2 Avg/Day total,211.67 repeats April; contradicts annual count,Ignore printed summary; compute88225/366=241.052
+D04,Mar2023 WDFC speed,S1 Table5=58.7; S2 Table5=48.7,Exclude from clean speed; sensitivity retains either reported value
+D05,GTKM table,Some corridor sums and published totals differ by1-3 million,Retain published monthly cells; aggregate monthly total column; disclose rounding
+D06,Annual daily train averages,Monthly means differ from calendar-day weighted totals,Use annual total/days for network rate; corridor means are unweighted
+D07,Conventional capacity,Published utilization differs from total/nominal capacity,Infer effective capacity from reported utilization only for normalized scenarios
+D08,Comparison coverage,No matched train-level pre/post controls or current section data,No nationwide causal or actual current path-release estimate

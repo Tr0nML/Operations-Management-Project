@@ -1,0 +1,53 @@
+
+Running extract_data.py
+{
+  "raw_metric_cells": 444,
+  "corridor_month_rows": 96,
+  "total_month_rows": 52,
+  "annual_count_totals": {
+    "2020": 2470,
+    "2021": 23544,
+    "2022": 62277,
+    "2023": 88225,
+    "2024": 130116
+  },
+  "unique_corridor_dates": true,
+  "missing_clean_speed": 1,
+  "missing_clean_train_rates": 26,
+  "input_sha256": "6c3be0754fd13c2ef06923fcf895af503b221de0cb653277d0455b3db3a5c3ae",
+  "status": "passed"
+}
+
+Running run_analysis.py
+{
+  "train_growth_pct": 47.48200623406065,
+  "gtkm_growth_pct": 61.29205560405615,
+  "EDFC_speed_latest": 41.65,
+  "EDFC_speed_prior": 45.10833333333333,
+  "EDFC_wtr_latest": 1.6433333333333333,
+  "EDFC_wtr_prior": 1.2241666666666666,
+  "EDFC_wtr_change_pct": 34.240980258679386,
+  "WDFC_speed_latest": 51.96666666666667,
+  "WDFC_wtr_latest": 0.7783333333333333,
+  "selected_forecast_model": "Day-adjusted naive",
+  "heuristic_test_coverage": 0.4166666666666667
+}
+     split              model  n         MAE        RMSE  WAPE_pct  selected_on_validation
+      Test     12-month drift 12  845.643939 1043.745476  7.798985                   False
+      Test Day-adjusted naive 12  505.063786  580.957166  4.657971                    True
+      Test              Naive 12  804.250000 1017.365429  7.417228                   False
+      Test      Random forest 12 1077.774547 1214.500332  9.939819                   False
+      Test     Seasonal naive 12 3490.916667 3547.010114 32.195118                   False
+Validation     12-month drift 12  376.863636  491.932330  5.125943                   False
+Validation Day-adjusted naive 12  297.897531  394.593171  4.051879                    True
+Validation              Naive 12  395.000000  485.956102  5.372627                   False
+Validation      Random forest 12  585.769869  723.172050  7.967400                   False
+Validation     Seasonal naive 12 2162.333333 2221.220273 29.411165                   False
+
+Running make_figures.py
+Created 7 figures.
+
+Running build_dashboard.py
+Built standalone dashboard; no network connection or API key required.
+
+Complete. See outputs/, figures/ and dashboard/.

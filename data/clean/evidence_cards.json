@@ -1,0 +1,90 @@
+[
+  {
+    "id": "E01",
+    "source_id": "S1",
+    "theme": "Throughput",
+    "title": "Observed train growth",
+    "summary": "DFC reported 88225 train movements in FY2023-24 and 130116 in FY2024-25. This is 47.5 percent growth. Network expansion and diversion contribute to growth, so growth alone is not productivity or a causal estimate of decongestion.",
+    "locator": "DFCCIL Annual Report 2024-25, printed p 48, Table 3"
+  },
+  {
+    "id": "E02",
+    "source_id": "S1",
+    "theme": "Reliability",
+    "title": "Speed and wagon turnround",
+    "summary": "EDFC monthly average speed and wagon turnround should be tracked alongside throughput. The study computes unweighted annual means from monthly values. Wagon turnround is DFCCIL's reported measure, not terminal dwell or a full Indian Railways wagon cycle.",
+    "locator": "DFCCIL Annual Report 2024-25, printed p 49, Tables 5-6"
+  },
+  {
+    "id": "E03",
+    "source_id": "S2",
+    "theme": "Data quality",
+    "title": "Conflicting speed cell",
+    "summary": "WDFC March 2023 speed is 48.7 km/h in the 2023-24 annual report and 58.7 in the 2024-25 report. The clean dataset excludes this disputed observation and retains both values for sensitivity analysis. No missing values are invented.",
+    "locator": "DFCCIL Annual Report 2023-24, Table 5; 2024-25, Table 5"
+  },
+  {
+    "id": "E04",
+    "source_id": "S3",
+    "theme": "Capacity",
+    "title": "Conventional line capacity",
+    "summary": "World Bank Table 5 reports FY2022-23 conventional line passenger, freight and other train volumes with capacity utilization. This period already includes some DFC operation. Diversion scenarios use these historical loads and equal train weights; they do not measure current released paths.",
+    "locator": "World Bank ICR00006390, Annex 4, printed p 85, Table 5"
+  },
+  {
+    "id": "E05",
+    "source_id": "S4",
+    "theme": "Comparability",
+    "title": "National speed benchmark",
+    "summary": "Indian Railways Year Book 2023-24 reports broad-gauge all-traction goods train speeds of 37.8, 30.8 and 25.0 km/h for FY2021-22, FY2022-23 andFY2023-24. Coverage differs from corridor monthly means. A difference between these figures is not a matched causal treatment effect.",
+    "locator": "Indian Railways Year Book 2023-24, printed p 48, sectionF"
+  },
+  {
+    "id": "E06",
+    "source_id": "S5",
+    "theme": "Data quality",
+    "title": "Independent publication cross-check",
+    "summary": "PIB's 2024 year-end review reports October 2024 DFC train movements of 11024, gross tonne-kilometres of 16731 million, and corridor speeds of 44.6 and 51.3 km/h. These agree with the annual report cells. Both publications ultimately depend on railway administrative reporting.",
+    "locator": "PIB29December 2024, DFC progress table"
+  },
+  {
+    "id": "E07",
+    "source_id": "S6",
+    "theme": "Connectivity",
+    "title": "Terminals and first and last mile",
+    "summary": "BRIEF's NITI-funded study identifies infrastructure, operational efficiency and first and last-mile connectivity as constraints. This supports investigating terminal interfaces alongside mainline capacity. The study's recommendations and stakeholder perceptions do not establish the causes of this project's observed speed changes.",
+    "locator": "BRIEF, Improving rail efficiency and share in India's freight transport, executive summary and chapter 6"
+  },
+  {
+    "id": "E08",
+    "source_id": "S7",
+    "theme": "Evaluation",
+    "title": "Targets versus outcomes",
+    "summary": "JICA's 2017 ex-ante evaluation sets anticipated DFC transport and operational benefits. An appraisal target is an expected future outcome, not an achieved benefit. This project keeps planned targets separate from reported operational observations.",
+    "locator": "JICA2017 ex-ante evaluation, Dedicated Freight Corridor Project"
+  },
+  {
+    "id": "E09",
+    "source_id": "S8",
+    "theme": "Forecasting",
+    "title": "Preventing temporal leakage",
+    "summary": "Time series cross-validation evaluates forecasts using only observations available before each forecast origin. This project uses April 2023-March 2024 for model selection and April 2024-March 2025 for rolling one-month test forecasts. A historical data cutoff is not a reconstruction of publication availability.",
+    "locator": "Hyndman and Athanasopoulos 2021, chapter 5.10"
+  },
+  {
+    "id": "E10",
+    "source_id": "S9",
+    "theme": "Forecasting",
+    "title": "Random forest limitations",
+    "summary": "A random forest averages decision-tree predictions. This project's small random forest uses lagged train counts and known calendar information. Trees can struggle to extrapolate a growing series; model choice must depend on temporal validation rather than the complexity of the model.",
+    "locator": "scikit-learn user guide, section 1.11.2"
+  },
+  {
+    "id": "E11",
+    "source_id": "S10",
+    "theme": "Connectivity",
+    "title": "Integrated logistics",
+    "summary": "The World Bank's 2022 Rail Logistics project announcement emphasizes multimodal hubs, terminal links and first and last-mile connectivity. These priorities inform the proposed coordination pilot. Announced financing and expected benefits are not savings measured by this assignment.",
+    "locator": "World Bank 10June 2022 rail logistics press release"
+  }
+]

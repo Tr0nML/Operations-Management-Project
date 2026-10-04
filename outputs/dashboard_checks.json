@@ -1,0 +1,10 @@
+{
+  "javascript_errors": [],
+  "filters": "passed",
+  "model_switch": "passed",
+  "capacity_slider": "passed",
+  "cost_calculation": "passed",
+  "chatbot_retrieval_and_abstention": "passed",
+  "mobile_overflow": false,
+  "visual_count": 7
+}

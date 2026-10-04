@@ -1,0 +1,112 @@
+[
+  {
+    "id": "S1",
+    "author": "Dedicated Freight Corridor Corporation of India Limited",
+    "year": "2025",
+    "title": "Annual report 2024–25",
+    "url": "https://dfccil.com/images/uploads/img/DFCCIL-Annual-Report-2024-25-19112025_LR6E.pdf",
+    "type": "Official annual report",
+    "access": "Downloaded PDF and extracted text; no login",
+    "use": "Monthly trains, corridor trains/day, gross tonne-km, speed and wagon turnround; printed pp47–49, Tables2–6",
+    "limit": "Self-reported administrative data; changing network and documented inconsistent cells"
+  },
+  {
+    "id": "S2",
+    "author": "Dedicated Freight Corridor Corporation of India Limited",
+    "year": "2024",
+    "title": "Annual report 2023–24",
+    "url": "https://dfccil.com/images/uploads/img/DFCCIL-Annual-Report-2024_Final_3M0F.pdf",
+    "type": "Official annual report",
+    "access": "Downloaded PDF and extracted text; no login",
+    "use": "Cross-check of historical figures; printed p72, Table5; DFIS discussion printed p76",
+    "limit": "Earlier reporting vintage; WDFC March2023 differs from S1"
+  },
+  {
+    "id": "S3",
+    "author": "World Bank",
+    "year": "2024",
+    "title": "Implementation completion and results report for Eastern Dedicated Freight Corridor 1, 2, and 3 (Report No. ICR00006390)",
+    "url": "https://documents1.worldbank.org/curated/en/099022724172513595/pdf/BOSIB1e46d36ba0201af8417b8b2ecd7db3.pdf",
+    "type": "Project completion evaluation",
+    "access": "Downloaded PDF and extracted text; no login",
+    "use": "Conventional parallel-line train volumes and utilization; Annex4 printed p85, Table5",
+    "limit": "FY2022–23 is partly post-DFC; capacity arithmetic is not causal impact identification"
+  },
+  {
+    "id": "S4",
+    "author": "Ministry of Railways",
+    "year": "n.d.",
+    "title": "Indian Railways year book 2023–24",
+    "url": "https://nfr.indianrailways.gov.in/railwayboard/uploads/directorate/stat_econ/2025/IR%20Year%20Book%202023-24-English.pdf",
+    "type": "Official statistical yearbook",
+    "access": "Public PDF readable through web retrieval; direct download inconsistent",
+    "use": "Broad-gauge all-traction goods speed, printed p48, sectionF",
+    "limit": "National aggregate differs from DFC corridor population and monthly arithmetic means"
+  },
+  {
+    "id": "S5",
+    "author": "Ministry of Railways",
+    "year": "2024, December 29",
+    "title": "Ministry of Railways year end review 2024",
+    "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2088668",
+    "type": "Official press release",
+    "access": "Public webpage and saved HTML; no login",
+    "use": "Independent publication cross-check for October2024 train count, GTKM and speed",
+    "limit": "Not independent operational measurement; same administrative system"
+  },
+  {
+    "id": "S6",
+    "author": "Bureau of Research on Industry and Economic Fundamentals",
+    "year": "n.d.",
+    "title": "Improving rail efficiency and share in India’s freight transport",
+    "url": "https://www.niti.gov.in/sites/default/files/2023-03/Efficiency%20and%20competitiveness%20of%20Indian%20Railways.pdf",
+    "type": "NITI Aayog-funded research report",
+    "access": "Public PDF readable through web retrieval",
+    "use": "Operational bottlenecks, terminal constraints, first and last-mile connectivity; executive summary and chapter6",
+    "limit": "BRIEF authored the study; NITI disclaimer does not endorse its methodology or findings"
+  },
+  {
+    "id": "S7",
+    "author": "Japan International Cooperation Agency",
+    "year": "2017",
+    "title": "Ex-ante evaluation for Dedicated Freight Corridor Project (Procurement of Electric Locomotives)",
+    "url": "https://www2.jica.go.jp/en/evaluation/pdf/2017_ID-P261_1_f.pdf",
+    "type": "Project appraisal",
+    "access": "Public PDF readable through web retrieval",
+    "use": "Rationale for dedicated capacity and distinction between planned benefits and achieved outcomes",
+    "limit": "Ex-ante targets are not realized outcomes"
+  },
+  {
+    "id": "S8",
+    "author": "Hyndman, R. J., & Athanasopoulos, G.",
+    "year": "2021",
+    "title": "Forecasting: Principles and practice (3rd ed.), section 5.10 Time series cross-validation",
+    "url": "https://otexts.com/fpp3/tscv.html",
+    "type": "Technical textbook",
+    "access": "Open web textbook",
+    "use": "Rolling-origin validation using strictly prior observations",
+    "limit": "Sound evaluation does not resolve small-sample uncertainty or operational data latency"
+  },
+  {
+    "id": "S9",
+    "author": "scikit-learn developers",
+    "year": "n.d.",
+    "title": "Ensemble methods: Random forests and other randomized tree ensembles",
+    "url": "https://scikit-learn.org/stable/modules/ensemble.html#forest",
+    "type": "Official software documentation",
+    "access": "Open documentation; accessed4October2026",
+    "use": "Random forest mechanics and constrained tree complexity",
+    "limit": "Library documentation is methodological guidance, not evidence of railway performance gains"
+  },
+  {
+    "id": "S10",
+    "author": "World Bank",
+    "year": "2022, June 10",
+    "title": "World Bank provides $245 million to help Indian Railways carry more freight, reduce GHG emissions",
+    "url": "https://www.worldbank.org/en/news/press-release/2022/06/10/world-bank-provides-245-million-to-help-indian-railways-carry-more-freight-reduce-ghg-emissions",
+    "type": "Project announcement",
+    "access": "Public webpage; no login",
+    "use": "Terminal integration, multimodal hubs and first and last-mile connectivity",
+    "limit": "Announced financing and expected benefits are not measured savings from this study"
+  }
+]
